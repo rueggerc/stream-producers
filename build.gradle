@@ -1,0 +1,14 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+    jcenter()
+}
+
+dependencies {	
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
+   	compile 'log4j:log4j:1.2.17'
+	testCompile 'junit:junit:4.12'
+}
+
