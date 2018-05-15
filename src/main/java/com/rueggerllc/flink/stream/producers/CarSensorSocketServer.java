@@ -15,51 +15,53 @@ import org.apache.log4j.Logger;
 public class CarSensorSocketServer {
 
 	private static Logger logger = Logger.getLogger(CarSensorSocketServer.class);
-	private static int generationPeriodSeconds = 60;
+	private static int generationPeriodSeconds = 15;
 	
-	public static void main(String[] args) {
-		
-		
-		Scanner stdin = null;
-		try {
+	public CarSensorSocketServer() {
+	}
+	
+	public void testCase1() {
 			
-			logger.info("CarSensorSocketServer Startup...");
-			int portNumber = 9999;
-			ServerSocket serverSocket = new ServerSocket(portNumber);
-			logger.info("Waiting for Client...");
-			
-			Socket clientSocket = serverSocket.accept();
-			logger.info("Got client connection");
-			PrintWriter socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);
-			BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			
-			// Start Data Producing Thread
-			ProducerThread producer = new ProducerThread(socketOutput, generationPeriodSeconds);
-			producer.start();
-			
-			// Main Thread
-			// Wait for user to indicate "exit" to shutdown
-			logger.info("Type exit to shutdown");
-			stdin = new Scanner(System.in);
-			String line = "";
-			while (!line.equals("exit")) {
-				line = stdin.next();
-			}
-			
-			logger.info("Stopping Producer...");
-			producer.shutdown();
-			
-			// Exit
-			producer.join();
-			logger.info("CarSensorSocketServer Shutdown");
+			Scanner stdin = null;
+			try {
+				
+				logger.info("CarSensorSocketServer Startup...");
+				int portNumber = 9999;
+				ServerSocket serverSocket = new ServerSocket(portNumber);
+				logger.info("Waiting for Client...");
+				
+				Socket clientSocket = serverSocket.accept();
+				logger.info("Got client connection");
+				PrintWriter socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);
+				BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				
+				// Start Data Producing Thread
+				ProducerThread producer = new ProducerThread(socketOutput, generationPeriodSeconds);
+				producer.start();
+				
+				// Main Thread
+				// Wait for user to indicate "exit" to shutdown
+				logger.info("Type exit to shutdown");
+				stdin = new Scanner(System.in);
+				String line = "";
+				while (!line.equals("exit")) {
+					line = stdin.next();
+				}
+				
+				logger.info("Stopping Producer...");
+				producer.shutdown();
+				
+				// Exit
+				producer.join();
+				logger.info("CarSensorSocketServer Shutdown");
 			
 			
 		} catch (Exception e) {
-			logger.error("Error", e);
-		} finally {
-			// stdin.close();
+			logger.error("ERROR", e);
 		}
 	}
+	
+
 	
 	private static class ProducerThread extends Thread {
 		
@@ -108,24 +110,21 @@ public class CarSensorSocketServer {
 		private void senseCars(int numCars) throws Exception {
 			
 			String key = "sensor1";
-			// int sleepAmount = 60000/numCars;
-			// int sleepAmount = 15000/numCars;
-			
-			// Number of cars every 10 seconds
 			int generationPeriod = generationPeriodSeconds * 1000;
-			int sleepAmount = generationPeriod/numCars;
+			int sleepAmount = (generationPeriodSeconds - numCars) * 1000;
+			System.out.println("Sleep Amount=" + sleepAmount);
+			// sleep(sleepAmount);
+			
 			for (int i = 0; i < numCars && stop==false; i++) {
 				Date now = Calendar.getInstance().getTime();
-				
-				long milliseconds = Calendar.getInstance().getTimeInMillis();
-				long seconds = java.time.Instant.now().getEpochSecond();
-				
-				String line = String.format("id=%s event=car period=%d timestamp=%d timestamph=%s", key, period, milliseconds, format.format(now));
-				System.out.println(line);
-				socketWriter.println(line);
-				System.out.println("Sleep=" + sleepAmount);
-				sleep(sleepAmount);
+				long timestamp = Calendar.getInstance().getTimeInMillis();
+				// long seconds = java.time.Instant.now().getEpochSecond();
+				String msg = String.format("id=%s event=car period=%d timestamp=%d timestamph=%s", key, period, timestamp, format.format(now));
+				System.out.println(msg);
+				socketWriter.println(msg);
+				sleep(1000);
 			}
+			sleep(sleepAmount);
 			period++;
 		}
 		
@@ -135,6 +134,51 @@ public class CarSensorSocketServer {
 		}
 		
 	};
+
+	
+	
+	
+	public static void main(String[] args) {
+		Scanner stdin = null;
+		try {
+			
+			logger.info("CarSensorSocketServer Startup...");
+			int portNumber = 9999;
+			ServerSocket serverSocket = new ServerSocket(portNumber);
+			logger.info("Waiting for Client...");
+			
+			Socket clientSocket = serverSocket.accept();
+			logger.info("Got client connection");
+			PrintWriter socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);
+			BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			
+			// Start Data Producing Thread
+			ProducerThread producer = new ProducerThread(socketOutput, generationPeriodSeconds);
+			producer.start();
+			
+			// Main Thread
+			// Wait for user to indicate "exit" to shutdown
+			logger.info("Type exit to shutdown");
+			stdin = new Scanner(System.in);
+			String line = "";
+			while (!line.equals("exit")) {
+				line = stdin.next();
+			}
+			
+			logger.info("Stopping Producer...");
+			producer.shutdown();
+			
+			// Exit
+			producer.join();
+			logger.info("CarSensorSocketServer Shutdown");
+			
+			
+		} catch (Exception e) {
+			logger.error("Error", e);
+		} finally {
+			// stdin.close();
+		}
+	}
 	
 	
 

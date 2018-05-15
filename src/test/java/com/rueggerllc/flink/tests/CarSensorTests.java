@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rueggerllc.flink.stream.beans.CarSensorReading;
+import com.rueggerllc.flink.stream.producers.CarSensorSocketServer;
 
 
 public class CarSensorTests {
@@ -100,7 +101,7 @@ public class CarSensorTests {
 	}	
 	
 	@Test
-	// @Ignore
+	@Ignore
 	public void testConvertJSONToCarSensorReading() {
 		
 		try {
@@ -122,6 +123,18 @@ public class CarSensorTests {
 	}
 	
 	
+	@Test
+	// @Ignore
+	public void testCarSensorEvents1() {
+		
+		try {
+			CarSensorSocketServer server = new CarSensorSocketServer();
+			server.testCase1();
+			
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}
+	}
 	
 	
 	
