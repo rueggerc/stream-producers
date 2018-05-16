@@ -9,9 +9,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.rueggerllc.flink.stream.producers.ProducerStrategy1;
-import com.rueggerllc.flink.stream.producers.ProducerStrategy2;
-import com.rueggerllc.flink.stream.producers.SensorSocketServer;
+import com.rueggerllc.flink.stream.producers.socket.ProducerStrategy131316;
+import com.rueggerllc.flink.stream.producers.socket.ProducerStrategy131619;
+import com.rueggerllc.flink.stream.producers.socket.SensorSocketServer;
 
 
 public class SensorTests {
@@ -42,35 +42,23 @@ public class SensorTests {
 	}
 		
 	
-	@Test
-	@Ignore
-	public void testSensorTestCase1() {
-		try {
-			SensorSocketServer server = new SensorSocketServer(new ProducerStrategy1());
-			server.execute();
-		} catch (Exception e) {
-			logger.error("ERROR", e);
-		}
-	}
-	
-	@Test
-	@Ignore
-	public void testSensorTestCase2NoDelay() {
-		try {
-			boolean simulateDelay = false;
-			SensorSocketServer server = new SensorSocketServer(new ProducerStrategy2(simulateDelay));
-			server.execute();
-		} catch (Exception e) {
-			logger.error("ERROR", e);
-		}
-	}
 	
 	@Test
 	// @Ignore
-	public void testSensorTestCase2WithDelay() {
+	public void testSensorProducer131616() {
 		try {
-			boolean simulateDelay = true;
-			SensorSocketServer server = new SensorSocketServer(new ProducerStrategy2(simulateDelay));
+			SensorSocketServer server = new SensorSocketServer(new ProducerStrategy131316());
+			server.execute();
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}
+	}
+	
+	@Test
+	@Ignore
+	public void testSensorProducer131619() {
+		try {
+			SensorSocketServer server = new SensorSocketServer(new ProducerStrategy131619());
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);

@@ -1,4 +1,4 @@
-package com.rueggerllc.flink.stream.producers;
+package com.rueggerllc.flink.stream.producers.socket;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
