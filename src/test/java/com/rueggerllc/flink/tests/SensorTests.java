@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.rueggerllc.flink.stream.producers.socket.ProducerStrategy131316;
 import com.rueggerllc.flink.stream.producers.socket.ProducerStrategy131619;
-import com.rueggerllc.flink.stream.producers.socket.SensorSocketServer;
+import com.rueggerllc.flink.stream.producers.socket.SocketProducerServer;
 
 
 public class SensorTests {
@@ -47,7 +47,7 @@ public class SensorTests {
 	// @Ignore
 	public void testSensorProducer131616() {
 		try {
-			SensorSocketServer server = new SensorSocketServer(new ProducerStrategy131316());
+			SocketProducerServer server = new SocketProducerServer(new ProducerStrategy131316());
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -58,7 +58,7 @@ public class SensorTests {
 	@Ignore
 	public void testSensorProducer131619() {
 		try {
-			SensorSocketServer server = new SensorSocketServer(new ProducerStrategy131619());
+			SocketProducerServer server = new SocketProducerServer(new ProducerStrategy131619());
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);

@@ -12,12 +12,12 @@ import org.apache.log4j.Logger;
 
 import com.rueggerllc.flink.stream.producers.ProducerStrategy;
 
-public class SensorSocketServer {
+public class SocketProducerServer {
 
-	private static Logger logger = Logger.getLogger(SensorSocketServer.class);
+	private static Logger logger = Logger.getLogger(SocketProducerServer.class);
 	private ProducerStrategy strategy;
 	
-	public SensorSocketServer(ProducerStrategy strategy) {
+	public SocketProducerServer(ProducerStrategy strategy) {
 		this.strategy = strategy;
 	}
 	
