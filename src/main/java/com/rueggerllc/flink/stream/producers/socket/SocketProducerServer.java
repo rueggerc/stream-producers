@@ -15,9 +15,9 @@ import com.rueggerllc.flink.stream.producers.ProducerStrategy;
 public class SocketProducerServer {
 
 	private static Logger logger = Logger.getLogger(SocketProducerServer.class);
-	private ProducerStrategy strategy;
+	private SocketProducerStrategy strategy;
 	
-	public SocketProducerServer(ProducerStrategy strategy) {
+	public SocketProducerServer(SocketProducerStrategy strategy) {
 		this.strategy = strategy;
 	}
 	
@@ -35,9 +35,10 @@ public class SocketProducerServer {
 				logger.info("Got client connection");
 				PrintWriter socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);
 				BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				strategy.setSocketWriter(socketOutput);
 				
 				// Start Data Producing Thread
-				ProducerThread producer = new ProducerThread(socketOutput, strategy);
+				ProducerThread producer = new ProducerThread(strategy);
 				producer.start();
 				
 				// Main Thread
@@ -67,21 +68,16 @@ public class SocketProducerServer {
 		
 		private ProducerStrategy strategy;
 		private boolean stop = false;
-		private PrintWriter socketWriter;
-		private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		private int period = 0;
-		private int generationPeriodSeconds = 0;
 
 		
-		public ProducerThread(PrintWriter socketWriter, ProducerStrategy strategy) {
-			this.socketWriter = socketWriter;
+		public ProducerThread(ProducerStrategy strategy) {
 			this.strategy = strategy;
 		}
 		
 		
 		public void run() {
 			try {
-				strategy.execute(socketWriter);
+				strategy.execute();
 			} catch (Exception e) {
 				logger.error("ERROR", e);
 			} finally {

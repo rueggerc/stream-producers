@@ -8,41 +8,60 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import com.rueggerllc.flink.stream.producers.ProducerStrategy;
+import com.rueggerllc.flink.stream.util.Utils;
 
 public abstract class SocketProducerStrategy implements ProducerStrategy {
 	
 	private static Logger logger = Logger.getLogger(SocketProducerStrategy.class);
-	private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+	private PrintWriter socketWriter;
 	private long startTime;
 	
-	public abstract void createMessages(PrintWriter socketWriter) throws Exception;
+	protected SocketProducerStrategy() {
+	}
+	
+	
+	public abstract void createMessages() throws Exception;
 	
 	protected long getTimestamp() {
 		long timestamp = Calendar.getInstance().getTimeInMillis();
 		return timestamp;
 	}
 	
-	protected Date getDate(long timestamp) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(timestamp);
-		return calendar.getTime();
-	}
 	
-	public void execute(PrintWriter socketWriter) throws Exception {
+	public void execute() throws Exception {
 		startTime = getTimestamp();
-		createMessages(socketWriter);
+		createMessages();
 	}
 	
-	
-	protected void sendMessage(PrintWriter socketWriter, long timestamp) {
-		String key = "sensor1";
+	protected void sendMessage(String key, long timestamp) {
 		long delta = (getTimestamp() - startTime)/1000;
-		Date timestampH = getDate(timestamp);
-		String msg = String.format("id=%s timestamp=%d timestamph=%s t=%d", key, timestamp, format.format(timestampH), delta);
+		String msg = String.format("id=%s timestamp=%d timestamph=%s t=%d", key, timestamp, Utils.getFormattedTimestamp(timestamp), delta);
 		System.out.println(msg);
 		socketWriter.println(msg);
 		socketWriter.flush();
 	}
+
+
+	public PrintWriter getSocketWriter() {
+		return socketWriter;
+	}
+
+
+	public void setSocketWriter(PrintWriter socketWriter) {
+		this.socketWriter = socketWriter;
+	}
+	
+//	protected void sendMessage(PrintWriter socketWriter, long timestamp) {
+//		String key = "sensor1";
+//		long delta = (getTimestamp() - startTime)/1000;
+//		Date timestampH = getDate(timestamp);
+//		String msg = String.format("id=%s timestamp=%d timestamph=%s t=%d", key, timestamp, format.format(timestampH), delta);
+//		System.out.println(msg);
+//		socketWriter.println(msg);
+//		socketWriter.flush();
+//	}
+	
+
 	
 	
 }

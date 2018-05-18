@@ -7,8 +7,11 @@ import org.apache.log4j.Logger;
 public class ProducerStrategy131316 extends SocketProducerStrategy {
 	
 	private static Logger logger = Logger.getLogger(ProducerStrategy131316.class);
+	
+	public ProducerStrategy131316() {
+	}
 
-	public void createMessages(PrintWriter socketWriter) throws Exception {
+	public void createMessages() throws Exception {
 		
 		// Produce Sensor Events:
 		// Time 13 sensor1, sensor1
@@ -17,12 +20,12 @@ public class ProducerStrategy131316 extends SocketProducerStrategy {
 		// Period 1
 		Thread.sleep(13000);
 		long timestamp = getTimestamp();
-		sendMessage(socketWriter,timestamp);
-		sendMessage(socketWriter,timestamp);
+		sendMessage("sensor1",timestamp);
+		sendMessage("sensor1",timestamp);
 		
 		Thread.sleep(3000);
 		timestamp = getTimestamp();
-		sendMessage(socketWriter, timestamp);
+		sendMessage("sensor1", timestamp);
 	}
 	
 	public void shutdown() {
