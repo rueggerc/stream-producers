@@ -1,30 +1,76 @@
 package com.rueggerllc.flink.stream.producers.socket;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 import com.rueggerllc.flink.stream.producers.ProducerStrategy;
 import com.rueggerllc.flink.stream.util.Utils;
 
-public abstract class SocketProducerStrategy implements ProducerStrategy {
+public class SocketProducerStrategy implements ProducerStrategy {
 	
 	private static Logger logger = Logger.getLogger(SocketProducerStrategy.class);
 	private PrintWriter socketWriter;
+	private String filePath;
 	private long startTime;
 	
-	protected SocketProducerStrategy() {
+	public SocketProducerStrategy() {
+	}
+	
+	public SocketProducerStrategy(String filePath) {
+		this.filePath = filePath;
 	}
 	
 	
-	public abstract void createMessages() throws Exception;
+	public  void createMessages() throws Exception {
+		BufferedReader reader = null;
+		logger.info("createMessages BEGIN");
+		InputStream is = getClass().getClassLoader().getResourceAsStream(filePath);
+		if (is == null) {
+			throw new Exception("File Not Found: " + filePath);
+		}
+		reader = new BufferedReader(new InputStreamReader(is));
+		String line = null;
+		while ((line=reader.readLine()) != null) {
+			if (line.startsWith("sleep")) {
+				sleep(line);
+			} else {
+				sendMessage(line);
+			}
+		}
+		logger.info("createMessages END");
+	}
 	
+	private void sleep(String line) {
+		try {
+			String[] tokens = line.split(" ");
+			int sleepValue = Integer.valueOf(tokens[1]);
+			logger.info("sleep=" + sleepValue);
+			Thread.sleep(sleepValue*1000);
+		} catch (Exception e) {
+			logger.error("ERROR",e);
+		}
+	}
+	
+	private void sendMessage(String line) {
+		String[] tokens = line.split(" ");
+		String key = tokens[0];
+		int delayValue = Integer.valueOf(tokens[1]);
+		sendMessage(key,getTimestamp(delayValue));
+	}
+	
+	protected long getNow() {
+		return Calendar.getInstance().getTimeInMillis();
+	}
 	protected long getTimestamp() {
-		long timestamp = Calendar.getInstance().getTimeInMillis();
-		return timestamp;
+		return Calendar.getInstance().getTimeInMillis();
+	}
+	protected long getTimestamp(int delayValue) {
+		return Calendar.getInstance().getTimeInMillis() - (delayValue*1000);
 	}
 	
 	
@@ -34,9 +80,9 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 	}
 	
 	protected void sendMessage(String key, long timestamp) {
-		long delta = (getTimestamp() - startTime)/1000;
-		String msg = String.format("id=%s timestamp=%d timestamph=%s t=%d", key, timestamp, Utils.getFormattedTimestamp(timestamp), delta);
-		System.out.println(msg);
+		long delta = (getNow() - startTime)/1000;
+		String msg = String.format("id=%s timestamp=%d timestamph=%s t=+%d", key, timestamp, Utils.getFormattedTimestamp(timestamp), delta);
+		logger.info(msg);
 		socketWriter.println(msg);
 		socketWriter.flush();
 	}
@@ -51,15 +97,9 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 		this.socketWriter = socketWriter;
 	}
 	
-//	protected void sendMessage(PrintWriter socketWriter, long timestamp) {
-//		String key = "sensor1";
-//		long delta = (getTimestamp() - startTime)/1000;
-//		Date timestampH = getDate(timestamp);
-//		String msg = String.format("id=%s timestamp=%d timestamph=%s t=%d", key, timestamp, format.format(timestampH), delta);
-//		System.out.println(msg);
-//		socketWriter.println(msg);
-//		socketWriter.flush();
-//	}
+
+	public void shutdown() {
+	}
 	
 
 	

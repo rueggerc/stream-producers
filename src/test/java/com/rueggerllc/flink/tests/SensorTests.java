@@ -9,10 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.rueggerllc.flink.stream.producers.socket.ProducerStrategy131316;
-import com.rueggerllc.flink.stream.producers.socket.ProducerStrategy131619;
-import com.rueggerllc.flink.stream.producers.socket.ProducerStrategyCarSensor;
 import com.rueggerllc.flink.stream.producers.socket.SocketProducerServer;
+import com.rueggerllc.flink.stream.producers.socket.SocketProducerStrategy;
 
 
 public class SensorTests {
@@ -46,9 +44,9 @@ public class SensorTests {
 	
 	@Test
 	@Ignore
-	public void testSensorProducer131616() {
+	public void testStream() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new ProducerStrategy131316());
+			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream1.txt"));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -57,9 +55,9 @@ public class SensorTests {
 	
 	@Test
 	@Ignore
-	public void testSensorProducer131619() {
+	public void testStream131616() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new ProducerStrategy131619());
+			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131316.txt"));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -67,10 +65,10 @@ public class SensorTests {
 	}
 	
 	@Test
-	// @Ignore
-	public void testCarSensorUseCase() {
+	@Ignore
+	public void testStream131619() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new ProducerStrategyCarSensor());
+			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131619.txt"));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);

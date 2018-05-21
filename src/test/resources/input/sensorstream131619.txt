@@ -1,0 +1,6 @@
+sleep 13
+sensor1 0 28.33
+sleep 3
+sensor1 0 12.33
+sleep 3
+sensor1 6 311.42
