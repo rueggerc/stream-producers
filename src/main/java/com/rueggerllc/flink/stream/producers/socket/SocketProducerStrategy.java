@@ -36,8 +36,8 @@ public class SocketProducerStrategy implements ProducerStrategy {
 		reader = new BufferedReader(new InputStreamReader(is));
 		String line = null;
 		while ((line=reader.readLine()) != null) {
-			if (line.startsWith("sleep")) {
-				sleep(line);
+			if (timestamped) {
+				sendTimestampedMessage(line);
 			} else {
 				sendMessage(line);
 			}
@@ -45,20 +45,27 @@ public class SocketProducerStrategy implements ProducerStrategy {
 		logger.info("createMessages END");
 	}
 	
-	
-	
-	private void sleep(String line) {
-		try {
-			String[] tokens = line.split(" ");
-			int sleepValue = Integer.valueOf(tokens[1]);
-			sleep(sleepValue);
-		} catch (Exception e) {
-			logger.error("ERROR",e);
-		}
+
+	private void sendTimestampedMessage(String line) {
+		String[] tokens = line.split(",");
+		int sleepValue = Integer.valueOf(tokens[0]);
+		sleep(sleepValue);
+		int delta = Integer.valueOf(tokens[1]);
+		String msgData = tokens[2];
+		long timestamp = getTimestamp(delta);
+		String msg = String.format("%d %s", timestamp, msgData);
+		String msgDebug = String.format("%d %s (%s)", timestamp, msgData, Utils.getFormattedTimestamp(timestamp));
+		socketWriter.println(msg);
+		socketWriter.flush();
+		logger.debug(msgDebug);
 	}
+	
 	
 	private void sleep(int sleepValue) {
 		try {
+			if (sleepValue == 0) {
+				return;
+			}
 			Thread.sleep(sleepValue*1000);
 		} catch (Exception e) {
 			logger.error("ERROR",e);
@@ -66,47 +73,31 @@ public class SocketProducerStrategy implements ProducerStrategy {
 	}
 	
 	private void sendMessage(String line) {
-		if (timestamped == false) {
-			socketWriter.println(line);
-			socketWriter.flush();
-		} else { 
-			String[] tokens = line.split(" ");
-			String key = tokens[0];
-			int delayValue = Integer.valueOf(tokens[1]);
-			sendMessage(key,getTimestamp(delayValue));
-		}
+		socketWriter.println(line);
+		socketWriter.flush();
 	}
 	
-	private void sendTimetampedMessage(String line) {
-		String[] tokens = line.split(" ");
-		String key = tokens[0];
-		int delayValue = Integer.valueOf(tokens[1]);
-		sendMessage(key,getTimestamp(delayValue));
-	}
 	
 	protected long getNow() {
 		return Calendar.getInstance().getTimeInMillis();
 	}
-	protected long getTimestamp() {
-		return Calendar.getInstance().getTimeInMillis();
-	}
-	protected long getTimestamp(int delayValue) {
-		return Calendar.getInstance().getTimeInMillis() - (delayValue*1000);
+	protected long getTimestamp(int delta) {
+		return Calendar.getInstance().getTimeInMillis() - (delta*1000);
 	}
 	
 	
 	public void execute() throws Exception {
-		startTime = getTimestamp();
+		startTime = getNow();
 		createMessages();
 	}
 	
-	protected void sendMessage(String key, long timestamp) {
-		long delta = (getNow() - startTime)/1000;
-		String msg = String.format("id=%s timestamp=%d timestamph=%s t=+%d", key, timestamp, Utils.getFormattedTimestamp(timestamp), delta);
-		logger.info(msg);
-		socketWriter.println(msg);
-		socketWriter.flush();
-	}
+//	protected void sendMessage(String key, long timestamp) {
+//		long delta = (getNow() - startTime)/1000;
+//		String msg = String.format("id=%s timestamp=%d timestamph=%s t=+%d", key, timestamp, Utils.getFormattedTimestamp(timestamp), delta);
+//		logger.info(msg);
+//		socketWriter.println(msg);
+//		socketWriter.flush();
+//	}
 
 
 	public PrintWriter getSocketWriter() {

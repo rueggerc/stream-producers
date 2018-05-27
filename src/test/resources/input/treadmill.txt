@@ -1,18 +1,6 @@
-chris sleep=0 delta=0
-chris sleep=0 delta=0
-chris sleep=0 delta=0
-sleep 3
-chris delay=0 1
-joe delay=0 1
-joe delay=0 1
-larry delay=0 1
-chris delay=0 1
-larry delay=0 1
-chris delay=0 1
-gary delay=0 1
-gary delay=0 1
-gary delay=0 1
-gary delay=0 1
-gary delay=0 1
-chris delay=0 1
-gary delay=0 2
+0,0,id=sensor1 Message1
+0,0,id=sensor2 Message2
+5,0,Message3
+0,0,Message4
+4,0,Message5
+0,0,Message6

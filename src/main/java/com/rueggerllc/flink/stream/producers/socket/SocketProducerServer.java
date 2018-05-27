@@ -46,7 +46,7 @@ public class SocketProducerServer {
 				logger.info("Type exit to shutdown");
 				stdin = new Scanner(System.in);
 				String line = "";
-				while (!line.equals("exit")) {
+				while (!line.equalsIgnoreCase("exit") && !line.equalsIgnoreCase("quit")) {
 					line = stdin.next();
 				}
 				

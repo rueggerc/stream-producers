@@ -1,5 +1,3 @@
-sleep 13
-sensor1 0 28.33
-sensor1 0 311.42
-sleep 3
-sensor1 0 12.33
+13,0,sensor1 28.33
+0,0,sensor1 311.42
+3,0,sensor1 12.33

@@ -65,7 +65,7 @@ public class SensorTests {
 	}
 	
 	@Test
-	@Ignore
+	// @Ignore
 	public void testStream131619() {
 		try {
 			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131619.txt",true));
@@ -89,7 +89,7 @@ public class SensorTests {
 	
 	
 	@Test
-	// @Ignore
+	@Ignore
 	public void testWordCount() {
 		try {
 			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/words.txt",false));
