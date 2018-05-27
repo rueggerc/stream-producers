@@ -1,0 +1,18 @@
+chris sleep=0 delta=0
+chris sleep=0 delta=0
+chris sleep=0 delta=0
+sleep 3
+chris delay=0 1
+joe delay=0 1
+joe delay=0 1
+larry delay=0 1
+chris delay=0 1
+larry delay=0 1
+chris delay=0 1
+gary delay=0 1
+gary delay=0 1
+gary delay=0 1
+gary delay=0 1
+gary delay=0 1
+chris delay=0 1
+gary delay=0 2

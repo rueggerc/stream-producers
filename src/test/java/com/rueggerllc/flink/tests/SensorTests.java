@@ -46,7 +46,7 @@ public class SensorTests {
 	@Ignore
 	public void testStream() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream1.txt"));
+			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream1.txt",false));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -57,7 +57,7 @@ public class SensorTests {
 	@Ignore
 	public void testStream131616() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131316.txt"));
+			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131316.txt",true));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -68,7 +68,31 @@ public class SensorTests {
 	@Ignore
 	public void testStream131619() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131619.txt"));
+			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131619.txt",true));
+			server.execute();
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}
+	}
+	
+	
+	@Test
+	@Ignore
+	public void testTreadmillCounter() {
+		try {
+			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/treadmill.txt",true));
+			server.execute();
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}
+	}
+	
+	
+	@Test
+	// @Ignore
+	public void testWordCount() {
+		try {
+			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/words.txt",false));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);

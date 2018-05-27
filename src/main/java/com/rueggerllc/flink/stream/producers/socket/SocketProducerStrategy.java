@@ -14,15 +14,15 @@ import com.rueggerllc.flink.stream.util.Utils;
 public class SocketProducerStrategy implements ProducerStrategy {
 	
 	private static Logger logger = Logger.getLogger(SocketProducerStrategy.class);
+	private boolean timestamped = false;
 	private PrintWriter socketWriter;
 	private String filePath;
 	private long startTime;
+
 	
-	public SocketProducerStrategy() {
-	}
-	
-	public SocketProducerStrategy(String filePath) {
+	public SocketProducerStrategy(String filePath, boolean timestamped) {
 		this.filePath = filePath;
+		this.timestamped = timestamped;
 	}
 	
 	
@@ -45,11 +45,20 @@ public class SocketProducerStrategy implements ProducerStrategy {
 		logger.info("createMessages END");
 	}
 	
+	
+	
 	private void sleep(String line) {
 		try {
 			String[] tokens = line.split(" ");
 			int sleepValue = Integer.valueOf(tokens[1]);
-			logger.info("sleep=" + sleepValue);
+			sleep(sleepValue);
+		} catch (Exception e) {
+			logger.error("ERROR",e);
+		}
+	}
+	
+	private void sleep(int sleepValue) {
+		try {
 			Thread.sleep(sleepValue*1000);
 		} catch (Exception e) {
 			logger.error("ERROR",e);
@@ -57,6 +66,18 @@ public class SocketProducerStrategy implements ProducerStrategy {
 	}
 	
 	private void sendMessage(String line) {
+		if (timestamped == false) {
+			socketWriter.println(line);
+			socketWriter.flush();
+		} else { 
+			String[] tokens = line.split(" ");
+			String key = tokens[0];
+			int delayValue = Integer.valueOf(tokens[1]);
+			sendMessage(key,getTimestamp(delayValue));
+		}
+	}
+	
+	private void sendTimetampedMessage(String line) {
 		String[] tokens = line.split(" ");
 		String key = tokens[0];
 		int delayValue = Integer.valueOf(tokens[1]);
