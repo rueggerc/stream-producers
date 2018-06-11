@@ -9,6 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.rueggerllc.flink.stream.producers.socket.ContinuousSocketProducerStrategy;
+import com.rueggerllc.flink.stream.producers.socket.DiscreteSocketProducerStrategy;
 import com.rueggerllc.flink.stream.producers.socket.SocketProducerServer;
 import com.rueggerllc.flink.stream.producers.socket.SocketProducerStrategy;
 
@@ -46,18 +48,7 @@ public class SensorTests {
 	@Ignore
 	public void testStream() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream1.txt",false));
-			server.execute();
-		} catch (Exception e) {
-			logger.error("ERROR", e);
-		}
-	}
-	
-	@Test
-	@Ignore
-	public void testStream131616() {
-		try {
-			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131316.txt",true));
+			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream1.txt",false));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -66,25 +57,35 @@ public class SensorTests {
 	
 	@Test
 	// @Ignore
-	public void testStream131619() {
+	public void testStream131316() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/sensorstream131619.txt",true));
+			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131316.txt",true));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}
 	}
 	
-	
 	@Test
 	@Ignore
-	public void testTreadmillCounter() {
+	public void testStream131619() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/treadmill.txt",true));
+			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131619.txt",true));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}
+	}
+	
+	@Test
+	@Ignore
+	public void testSendContinuousMessages() {
+		try {
+			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131619.txt",true));
+			server.execute();
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}		
 	}
 	
 	
@@ -92,7 +93,7 @@ public class SensorTests {
 	@Ignore
 	public void testWordCount() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new SocketProducerStrategy("input/words.txt",false));
+			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/words.txt",false));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);

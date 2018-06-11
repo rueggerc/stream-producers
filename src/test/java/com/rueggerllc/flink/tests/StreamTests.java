@@ -9,13 +9,13 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.rueggerllc.flink.stream.producers.socket.DiscreteSocketProducerStrategy;
+import com.rueggerllc.flink.stream.producers.socket.ContinuousSocketProducerStrategy;
 import com.rueggerllc.flink.stream.producers.socket.SocketProducerServer;
 
 
-public class BasicStreamTests {
+public class StreamTests {
 
-	private static Logger logger = Logger.getLogger(BasicStreamTests.class);
+	private static Logger logger = Logger.getLogger(StreamTests.class);
 
 
 	@BeforeClass
@@ -40,16 +40,18 @@ public class BasicStreamTests {
 		logger.info("Dummy Test Begin");
 	}
 		
-
+	
+	
+	
 	@Test
 	// @Ignore
-	public void testWordCount() {
+	public void testSendContinuousMessages() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/words.txt",false));
+			SocketProducerServer server = new SocketProducerServer(new ContinuousSocketProducerStrategy("input/continuous1.txt",true));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
-		}
+		}		
 	}
 	
 	

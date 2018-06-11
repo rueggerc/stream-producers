@@ -21,6 +21,7 @@ public class SocketProducerServer {
 		this.strategy = strategy;
 	}
 	
+	
 	public void execute() {
 			
 			Scanner stdin = null;
@@ -55,7 +56,7 @@ public class SocketProducerServer {
 				
 				// Exit
 				producer.join();
-				logger.info("CarSensorSocketServer Shutdown");
+				logger.info("SocketProducerServer Shutdown");
 			
 			
 		} catch (Exception e) {
