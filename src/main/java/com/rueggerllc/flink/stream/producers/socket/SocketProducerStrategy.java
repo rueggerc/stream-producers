@@ -75,7 +75,6 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 		sleep(sleepValue);
 		socketWriter.println(msg);
 		socketWriter.flush();
-		logger.debug(msg);
 	}
 	
 	

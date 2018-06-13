@@ -78,15 +78,10 @@ public class CoreTests {
 	// @Ignore
 	public void testReadFile() {
 		try {
-			logger.info("MAX INT=" + Integer.MAX_VALUE);
-			logger.info("MAX LONG=" + Long.MAX_VALUE);
 			
-			// Data
 			ValueFactory valueFactory = new ValueFactory();
-			
 			long numberOfElements = 0;
 			long delay = 0;
-			
 			
 			String filePath = "input/raspberrypi.txt";
 			BufferedReader reader = null;
@@ -107,13 +102,11 @@ public class CoreTests {
 				} else if (tokens[0].equals("delay")) {
 					delay = getValue(tokens);
 					valueFactory.setDelay(delay);
-					
 				} else if (tokens[0].equals("key")) {
 					valueFactory.setKey(tokens[1]);
 				} else if (tokens[0].equals("numberOfKeys")) {
 					valueFactory.setNumberOfKeys(getValue(tokens));
 				} else {
-					getRangedValue(tokens);
 					ValueGenerator valueGenerator = getValueGenerator(tokens);
 					valueFactory.addValueGenerator(valueGenerator);
 				}
@@ -145,10 +138,6 @@ public class CoreTests {
 		return value;
 	}
 	
-	public void getRangedValue(String[] tokens) {
-		logger.info("Ranged Value");
-		logger.info("key=" + tokens[0] + " min=" + tokens[1] + " max=" + tokens[2]);
-	}
 	
 	public ValueGenerator getValueGenerator(String[] tokens) {
 		DoubleValueGenerator valueGenerator = new DoubleValueGenerator();

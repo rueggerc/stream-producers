@@ -2,6 +2,7 @@ package com.rueggerllc.flink.stream.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -39,6 +40,11 @@ public class ValueFactory {
 	public void addValueGenerator(ValueGenerator valueGenerator) {
 		valueGenerators.add(valueGenerator);
 	}
+	
+	public int getDelayValue() {
+		int value = (int)delay;
+		return value;
+	}
 
 	
 	public String getKey() {
@@ -57,15 +63,21 @@ public class ValueFactory {
 		if (messageCount == numberOfElements) {
 			return null;
 		}
-		Thread.sleep(delay*1000);
+		// Thread.sleep(delay*1000);
 		StringBuilder buffer = new StringBuilder();
-		String sep="";
+		buffer.append(getKeyValue());
+		String sep=",";
 		for (ValueGenerator valueGenerator : valueGenerators) {
 			buffer.append(sep + valueGenerator.getValue());
-			sep=",";
 		}
 		messageCount++;
 		return buffer.toString();
+	}
+	
+	private String getKeyValue() {
+		Random random = new Random();
+		long keyNumber = random.nextInt((int)numberOfKeys);
+		return getKey() + keyNumber;
 	}
 	
 	

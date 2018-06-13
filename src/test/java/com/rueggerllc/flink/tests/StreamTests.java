@@ -48,10 +48,10 @@ public class StreamTests {
 
 	
 	@Test
-	@Ignore
+	// @Ignore
 	public void testSendContinuousMessages() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new ContinuousSocketProducerStrategy("input/continuous1.txt",true));
+			SocketProducerServer server = new SocketProducerServer(new ContinuousSocketProducerStrategy("input/raspberrypi.txt",true));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -60,7 +60,7 @@ public class StreamTests {
 	
 	
 	@Test
-	// @Ignore
+	@Ignore
 	public void testReadFile() {
 		try {
 			String filePath = "input/raspberrypi.txt";
