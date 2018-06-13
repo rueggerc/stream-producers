@@ -19,7 +19,7 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 	protected  void createMessages(long startTime) throws Exception {
 		BufferedReader reader = null;
 		logger.info("createMessages BEGIN");
-		logger.info("startTime=" + Utils.getFormattedTimestamp(startTime));
+		// logger.info("startTime=" + Utils.getFormattedTimestamp(startTime));
 		InputStream is = getClass().getClassLoader().getResourceAsStream(getFilePath());
 		if (is == null) {
 			throw new Exception("File Not Found: " + getFilePath());
@@ -55,8 +55,8 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 		int sleepValue = Integer.valueOf(tokens[0]);
 		msgData = String.format("%d,%s", timestamp, msgData);
 		sendMessage(msgData,sleepValue);		
-		String msgDebug = String.format("%d,%s TS=(%s)", timestamp, msgData, Utils.getFormattedTimestamp(timestamp));
-		logger.debug(msgDebug);
+		// String msgDebug = String.format("%d,%s TS=(%s)", timestamp, msgData, Utils.getFormattedTimestamp(timestamp));
+		// logger.debug(msgDebug);
 
 	}
 	

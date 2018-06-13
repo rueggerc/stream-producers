@@ -1,6 +1,7 @@
 package com.rueggerllc.flink.stream.producers.socket;
 
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
@@ -100,6 +101,13 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 	}
 	protected boolean getTimestamped() {
 		return timestamped;
+	}
+	
+	protected void close(Reader reader) {
+		try {
+			if (reader != null) {reader.close();}
+		} catch (Exception e) {
+		}
 	}
 
 

@@ -31,8 +31,8 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 		String[] tokens = line.split(",");
 		int numberOfMessages = Integer.valueOf(tokens[0]);
 		int sleepDuration = Integer.valueOf(tokens[1]);
-		String msgData = getMessage(tokens);	
-		reader.close();
+		String msgData = getMessage(tokens);
+		close(reader);
 		for (int count = 0; count < numberOfMessages; count++) {
 			sendMessage(msgData,sleepDuration);
 		}

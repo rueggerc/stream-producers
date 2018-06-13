@@ -1,0 +1,8 @@
+#numberOfElements,2147483647
+numberOfElements,5
+key,sensor
+numberOfKeys,3
+delay,2
+temp,44,100
+humidity,70,83
+pressure,1000,1102
