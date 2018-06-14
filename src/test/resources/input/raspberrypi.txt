@@ -1,9 +1,12 @@
 #numberOfElements,2147483647
-numberOfElements,600
+numberOfElements,4000
 key,sensor
-numberOfKeys,9
-delay,1
-temp,44,100
-humidity,70,83
-pressure,1000,1102
-age,25,55
+numberOfKeys,20
+delay,2
+
+# Data Fields
+temp,double,44,100
+humidity,double,70,83
+pressure,double,1000,1102
+age,long,25,55
+name,string,Fred,Barney,Wilma,Betty,Dakota,Captain,Oscar,Darwin,Sunny

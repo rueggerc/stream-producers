@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import com.rueggerllc.flink.stream.producers.socket.ContinuousSocketProducerStrategy;
 import com.rueggerllc.flink.stream.producers.socket.SocketProducerServer;
+import com.rueggerllc.flink.stream.util.Utils;
 
 
 public class StreamTests {
@@ -72,6 +73,9 @@ public class StreamTests {
 			reader = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			while ((line=reader.readLine()) != null) {
+				if (line.startsWith("#") || Utils.isBlank(line)) {
+					continue;
+				}
 				logger.info(line);
 			}
 			close(reader);

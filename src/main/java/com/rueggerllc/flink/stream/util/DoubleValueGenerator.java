@@ -39,7 +39,8 @@ public class DoubleValueGenerator implements ValueGenerator {
 
 	public String getValue() {
 		Random random = new Random();
-		double value = minValue + (random.nextDouble()*maxValue);
+		double range = maxValue - minValue;
+		double value = minValue + (random.nextDouble()*range);
 		return decimalFormatter.format(value);
 	}
 

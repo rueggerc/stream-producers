@@ -63,7 +63,6 @@ public class ValueFactory {
 		if (messageCount == numberOfElements) {
 			return null;
 		}
-		// Thread.sleep(delay*1000);
 		StringBuilder buffer = new StringBuilder();
 		buffer.append(getKeyValue());
 		String sep=",";
@@ -78,6 +77,28 @@ public class ValueFactory {
 		Random random = new Random();
 		long keyNumber = random.nextInt((int)numberOfKeys);
 		return getKey() + keyNumber;
+	}
+	
+	public void createValueGenerator(String[] tokens) {
+		String type = tokens[1];
+		if (type.equals("double")) {
+			DoubleValueGenerator valueGenerator = new DoubleValueGenerator();
+			valueGenerator.setKey(tokens[0]);
+			valueGenerator.setMinValue(Double.valueOf(tokens[2]));
+			valueGenerator.setMaxValue(Double.valueOf(tokens[3]));
+			addValueGenerator(valueGenerator);
+		} else if (type.equals("long")) {
+			LongValueGenerator valueGenerator = new LongValueGenerator();
+			valueGenerator.setKey(tokens[0]);
+			valueGenerator.setMinValue(Long.valueOf(tokens[2]));
+			valueGenerator.setMaxValue(Long.valueOf(tokens[3]));
+			addValueGenerator(valueGenerator);
+		} else if (type.equals("string")) {
+			StringValueGenerator valueGenerator = new StringValueGenerator();
+			valueGenerator.setKey(tokens[0]);
+			valueGenerator.setPossibleValues(tokens);
+			addValueGenerator(valueGenerator);			
+		}
 	}
 	
 	

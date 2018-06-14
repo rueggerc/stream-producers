@@ -36,7 +36,7 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 			reader = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			while ((line=reader.readLine()) != null) {
-				if (line.startsWith("#")) {
+				if (line.startsWith("#") || Utils.isBlank(line)) {
 					continue;
 				}
 				String[] tokens = line.split(",");
@@ -51,8 +51,7 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 				} else if (tokens[0].equals("numberOfKeys")) {
 					valueFactory.setNumberOfKeys(getValue(tokens));
 				} else {
-					ValueGenerator valueGenerator = getValueGenerator(tokens);
-					valueFactory.addValueGenerator(valueGenerator);
+					valueFactory.createValueGenerator(tokens);
 				}
 			}
 			close(reader);
@@ -61,7 +60,8 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 			logger.info("====== GENERATE MESSAGES BEGIN");
 			String msg = null;
 			while ((msg = valueFactory.getNextMessage()) != null) {
-				logger.info("MSG=" + msg);
+				// logger.info("MSG=" + msg);
+				System.out.println("MSG=" + msg);
 				sendMessage(msg, valueFactory.getDelayValue());
 			}
 			logger.info("====== GENERATE MESSAGES END");
@@ -77,14 +77,6 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 		return value;
 	}
 	
-	
-	public ValueGenerator getValueGenerator(String[] tokens) {
-		DoubleValueGenerator valueGenerator = new DoubleValueGenerator();
-		valueGenerator.setKey(tokens[0]);
-		valueGenerator.setMinValue(Double.valueOf(tokens[1]));
-		valueGenerator.setMaxValue(Double.valueOf(tokens[2]));
-		return valueGenerator;
-	}	
 	
 	
 	

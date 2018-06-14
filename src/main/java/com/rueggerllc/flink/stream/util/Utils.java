@@ -17,5 +17,9 @@ public class Utils {
 	public static String getFormattedTimestamp(long timestamp) {
 		return dateFormatter.format(getDate(timestamp));
 	}
+	
+	public static boolean isBlank(String value) {
+		return value == null || value.trim().equals("");
+	}
 
 }
