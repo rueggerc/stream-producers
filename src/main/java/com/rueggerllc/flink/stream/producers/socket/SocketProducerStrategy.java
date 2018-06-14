@@ -26,38 +26,13 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 	public void execute() throws Exception {
 		startTime = getNow();
 		createMessages(startTime);
-		socketWriter.close();
 	}
 	public void shutdown() {
+		socketWriter.close();
 	}
 	
 	
 	protected abstract void createMessages(long startTime) throws Exception;
-	
-
-//	protected void sendTimestampedMessage(String line) {
-//		String[] tokens = line.split(",");
-//		int sleepValue = Integer.valueOf(tokens[0]);
-//		sleep(sleepValue);
-//		int delta = Integer.valueOf(tokens[1]);
-//		String msgData = getMessage(tokens);
-//		long timestamp = getTimestamp(delta);
-//		String msg = String.format("%d,%s", timestamp, msgData);
-//		String msgDebug = String.format("%d,%s TS=(%s)", timestamp, msgData, Utils.getFormattedTimestamp(timestamp));
-//		socketWriter.println(msg);
-//		socketWriter.flush();
-//		logger.debug(msgDebug);
-//	}
-	
-//	protected String getMessage(String[] tokens) {
-//		StringBuilder buffer = new StringBuilder();
-//		String sep = "";
-//		for (int i = 2; i < tokens.length; i++) {
-//			buffer.append(sep+tokens[i]);
-//			sep=",";
-//		}
-//		return buffer.toString();
-//	}
 	
 	
 	protected void sleep(int sleepValue) {
