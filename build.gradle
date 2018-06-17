@@ -6,7 +6,9 @@ repositories {
     jcenter()
 }
 
-dependencies {	
+dependencies {
+  	compile 'org.apache.kafka:kafka-clients:1.0.0'
+   	compile 'org.apache.kafka:kafka-streams:1.0.0'
 	compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
    	compile 'log4j:log4j:1.2.17'
 	testCompile 'junit:junit:4.12'
