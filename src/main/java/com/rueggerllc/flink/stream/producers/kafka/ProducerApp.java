@@ -1,5 +1,6 @@
 package com.rueggerllc.flink.stream.producers.kafka;
 
+import java.util.Date;
 import java.util.Properties;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -17,12 +18,12 @@ public class ProducerApp {
     public static void main(String[] argv)throws Exception {
     	
     	try {
-	        if (argv.length != 1) {
-	            logger.error("Please specify Topic Name");
-	            System.exit(-1);
-	        }
-	        String topicName = argv[0];
-	  
+//	        if (argv.length != 1) {
+//	            logger.error("Please specify Topic Name");
+//	            System.exit(-1);
+//	        }
+	        // String topicName = argv[0];
+	        String topicName = "number-topic";
 	
 	        // Configure the Producer
 	        Properties configProperties = new Properties();
@@ -31,44 +32,60 @@ public class ProducerApp {
 	        configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringSerializer");
 	        Producer<String,String> producer = new KafkaProducer<>(configProperties);
 
-	        // Message1
-	        String line = String.format("%s,%d","set1",3);
-            ProducerRecord<String, String> rec = new ProducerRecord<String, String>(topicName, "key1", line);
-            producer.send(rec);
-            
-	        // Message2
-	        line = String.format("%s,%d","set1",8);
-            rec = new ProducerRecord<String, String>(topicName,"key2",line);
-            producer.send(rec);
-            
-	        // Message3
-	        line = String.format("%s,%d","set1",4);
-            rec = new ProducerRecord<String, String>(topicName,"key3",line);
-            producer.send(rec);   
-            
-	        // Message4
-	        line = String.format("%s,%s","set1","foobar");
-	        rec = new ProducerRecord<String, String>(topicName,"key4",line);
-            producer.send(rec);   
-            
-	        // Message5
-	        line = String.format("%s,%d","set1",9);
-	        rec = new ProducerRecord<String, String>(topicName,"key5",line);
-            producer.send(rec);   
+//	        for (int i = 0; i < 10; i++) {
+//	        	long now = System.currentTimeMillis();
+//	        	 String line = String.format("More Kafka Data: " + now + " " + new Date(now));
+//	             ProducerRecord<String, String> rec = new ProducerRecord<String, String>(topicName, "key1", line);
+//	             producer.send(rec);
+//	             System.out.println(line);
+//	        }
 	        
-	        // Message6
-	        line = String.format("%s,%d","set1",6);
-	        rec = new ProducerRecord<String, String>(topicName,"key6",line);
-            producer.send(rec);   
-            
-	        // Message7
-	        line = String.format("%s,%d","set1",12);
-	        rec = new ProducerRecord<String, String>(topicName,"key7",line);
-            producer.send(rec);   
-            
+	        createNumberStream(producer, topicName);
+	        
 	        producer.close();
     	} catch (Exception e) {
         	System.out.println("ERROR:\n" + e);
         }
     }
+    
+    private static void createNumberStream(Producer<String,String>  producer, String topicName) {
+    	String line = String.format("set1,%s", "3");
+    	ProducerRecord<String, String> msg = new ProducerRecord<String, String>(topicName, "key1", line);
+    	producer.send(msg);
+    	System.out.println(line);
+    	
+    	line = String.format("set1,%s", "8");
+    	msg = new ProducerRecord<String, String>(topicName, "key1", line);
+    	producer.send(msg);
+    	System.out.println(line);
+    	
+    	line = String.format("set1,%s", "4");
+    	msg = new ProducerRecord<String, String>(topicName, "key1", line);
+    	producer.send(msg);
+    	System.out.println(line);
+    	
+    	line = String.format("set1,%s", "foobar");
+    	msg = new ProducerRecord<String, String>(topicName, "key1", line);
+    	producer.send(msg);
+    	System.out.println(line);
+    	
+    	line = String.format("set1,%s", "9");
+    	msg = new ProducerRecord<String, String>(topicName, "key1", line);
+    	producer.send(msg);
+    	System.out.println(line);
+    	
+       	line = String.format("set1,%s", "6");
+    	msg = new ProducerRecord<String, String>(topicName, "key1", line);
+    	producer.send(msg);
+    	System.out.println(line);
+    	
+       	line = String.format("set1,%s", "12");
+    	msg = new ProducerRecord<String, String>(topicName, "key1", line);
+    	producer.send(msg);
+    	System.out.println(line);
+    	
+    	
+    }
+    
+    
 }
