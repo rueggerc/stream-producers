@@ -1,0 +1,6 @@
+0,0,Mary,./home
+10,0,Bob,./cart
+10,0,Mary,./prod?id=1
+10,0,Liz,./home
+10,0,.Bob,./prod?id=3
+10,0,Mary,./prod?id=7
