@@ -56,7 +56,7 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 		msgData = String.format("%d,%s", timestamp, msgData);
 		sendMessage(msgData,sleepValue);		
 		// String msgDebug = String.format("%d,%s TS=(%s)", timestamp, msgData, Utils.getFormattedTimestamp(timestamp));
-		// logger.debug(msgDebug);
+		logger.info(msgData);
 
 	}
 	

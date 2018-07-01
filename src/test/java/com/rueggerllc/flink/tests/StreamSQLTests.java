@@ -41,12 +41,33 @@ public class StreamSQLTests {
 	}
 		
 
+	@Test
+	@Ignore
+	public void testPageViewsSmall() {
+		try {
+			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/pageviewsSmall.txt",true));
+			server.execute();
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}		
+	}
 	
 	@Test
 	// @Ignore
 	public void testPageViews() {
 		try {
 			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/pageviews.txt",true));
+			server.execute();
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}		
+	}
+	
+	@Test
+	@Ignore
+	public void testPageViewsBig() {
+		try {
+			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/pageviewsBig.txt",true));
 			server.execute();
 		} catch (Exception e) {
 			logger.error("ERROR", e);

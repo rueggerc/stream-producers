@@ -1,6 +1,10 @@
-0,0,Mary,./home
-10,0,Bob,./cart
-10,0,Mary,./prod?id=1
-10,0,Liz,./home
-10,0,.Bob,./prod?id=3
-10,0,Mary,./prod?id=7
+1,0,Mary,./home
+4,0,John,./reports?id=311
+4,0,Bob,./cart
+4,0,Mary,./prod?id=1
+4,0,Liz,./home
+4,0,John,./reports?id=312
+1,0,John,./reports?id=313
+1,0,Bob,./prod?id=3
+2,0,Mary,./prod?id=7
+2,0,Liz,./prod?id=4
