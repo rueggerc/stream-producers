@@ -49,7 +49,7 @@ public class StreamTests {
 	
 	@Test
 	@Ignore
-	public void tesSensor() {
+	public void testSensor() {
 		try {
 			String fileName = "input/raspberrypi.txt";
 			boolean timestamped = false;
@@ -65,7 +65,7 @@ public class StreamTests {
 	public void testSessionWindow() {
 		try {
 			String fileName = "input/sessionstream.txt";
-			boolean timestamped = false;
+			boolean timestamped = true;
 			runDiscreteSocketProducer(fileName,timestamped);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
