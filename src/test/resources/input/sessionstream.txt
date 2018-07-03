@@ -1,0 +1,16 @@
+# Here is a commmented line
+# Session1
+1,0,user1,./session1pge.xhtml
+1,0,user1,./orderbyPage.xhtml
+# Session2
+12,0,user1,./session2pge.xhtml
+2,0,user1,./catalog1234.xhtml
+1,0,user1,./orderbyPage.xhtml
+1,0,user1,./checkout123.xhtml
+# Session 3
+13,0,user1,./session3pge.xhtml
+3,0,user1,./catalog1234.xhtml
+1,0,user1,./catalog1234.xhtml
+2,0,user1,./logoutbyeee.xhtml
+# Session4
+11,0,user1,./session4pge.xhtml

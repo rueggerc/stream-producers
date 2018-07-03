@@ -1,0 +1,16 @@
+# Here is a commmented line
+
+1,0,user1,./landingPage.xhtml
+1,0,user1,./orderbyPage.xhtml
+
+12,0,user1,./landingPage.xhtml
+2,0,user1,./catalog1234.xhtml
+1,0,user1,./orderbyPage.xhtml
+1,0,user1,./checkout123.xhtml
+
+13,0,user1,./landingPage.xhtml
+3,0,user1,./catalog1234.xhtml
+1,0,user1,./catalog1234.xhtml
+2,0,user1,./logoutbyeee.xhtml
+
+11,0,user1,./landingPage.xhtml

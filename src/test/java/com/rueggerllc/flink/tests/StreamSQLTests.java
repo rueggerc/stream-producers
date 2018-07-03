@@ -1,6 +1,9 @@
 package com.rueggerllc.flink.tests;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -41,12 +44,25 @@ public class StreamSQLTests {
 	}
 		
 
+	
+	
 	@Test
 	@Ignore
 	public void testPageViewsSmall() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/pageviewsSmall.txt",true));
-			server.execute();
+			String fileName = "input/pageviewsSmall.txt";
+			runDiscreteSocketProducer(fileName);
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}		
+	}
+	
+	@Test
+	@Ignore
+	public void testPageViews() {
+		try {
+			String fileName = "input/pageviews.txt";
+			runDiscreteSocketProducer(fileName);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}		
@@ -54,10 +70,10 @@ public class StreamSQLTests {
 	
 	@Test
 	// @Ignore
-	public void testPageViews() {
+	public void testPageViewsBig() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/pageviews.txt",true));
-			server.execute();
+			String fileName = "input/pageviewsBig.txt";
+			runDiscreteSocketProducer(fileName);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}		
@@ -65,13 +81,22 @@ public class StreamSQLTests {
 	
 	@Test
 	@Ignore
-	public void testPageViewsBig() {
+	public void testPageViewsHuge() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/pageviewsBig.txt",true));
-			server.execute();
+			String fileName = "input/pageviewsHuge.txt";
+			runDiscreteSocketProducer(fileName);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}		
+	}
+	
+	private void runDiscreteSocketProducer(String fileName) throws Exception {
+		String strategyClassName = DiscreteSocketProducerStrategy.class.getCanonicalName();
+		Map<String,String> parms = new HashMap<String,String>();
+		parms.put("filePath",fileName);
+		parms.put("timestamped", "true");
+		SocketProducerServer server = new SocketProducerServer(strategyClassName, parms);
+		server.execute();		
 	}
 	
 	

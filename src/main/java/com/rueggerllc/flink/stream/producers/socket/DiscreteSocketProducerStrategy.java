@@ -19,7 +19,6 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 	protected  void createMessages(long startTime) throws Exception {
 		BufferedReader reader = null;
 		logger.info("createMessages BEGIN");
-		// logger.info("startTime=" + Utils.getFormattedTimestamp(startTime));
 		InputStream is = getClass().getClassLoader().getResourceAsStream(getFilePath());
 		if (is == null) {
 			throw new Exception("File Not Found: " + getFilePath());
@@ -27,10 +26,13 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 		reader = new BufferedReader(new InputStreamReader(is));
 		String line = null;
 		while ((line=reader.readLine()) != null) {
+			if (Utils.isBlank(line) || line.trim().startsWith("#")) {
+				continue;
+			}
 			if (getTimestamped()) {
 				sendTimestampedMessage(line);
 			} else {
-				sendMessage(line);
+				sendNoTimestampMessage(line);
 			}
 		}
 		logger.info("createMessages END");
@@ -51,20 +53,19 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 		String[] tokens = line.split(",");
 		String msgData = getMessage(tokens);
 		int delta = Integer.valueOf(tokens[1]);
-		long timestamp = getTimestamp(delta);
 		int sleepValue = Integer.valueOf(tokens[0]);
-		msgData = String.format("%d,%s", timestamp, msgData);
-		sendMessage(msgData,sleepValue);		
-		// String msgDebug = String.format("%d,%s TS=(%s)", timestamp, msgData, Utils.getFormattedTimestamp(timestamp));
-		logger.info(msgData);
-
+		sleep(sleepValue);
+		long timestamp = getTimestamp(delta);
+		msgData = String.format("%d,%s,%s", timestamp,msgData,getFormattedTimestamp(timestamp));
+		sendMessage(msgData);		
 	}
 	
-	protected void sendMessage(String line) {
+	protected void sendNoTimestampMessage(String line) {
 		String[] tokens = line.split(",");
 		int sleepValue = Integer.valueOf(tokens[0]);
+		sleep(sleepValue);
 		String msgData = getMessage(tokens);
-		sendMessage(msgData, sleepValue);
+		sendMessage(msgData);
 	}
 	
 	

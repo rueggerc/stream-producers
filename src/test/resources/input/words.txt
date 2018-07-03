@@ -1,9 +1,5 @@
-captain dakota ripley oscar
-sleep 5
-darwin foobar captain boots
-sleep 3
-Here are some more words captain 
-sleep 10
-red yellow green blue orange black
-sleep 10
-dakota
+15,0,line1 captain dakota ripley oscar
+8,0,line2 darwin foobar captain boots
+9,0,line3 Here are some more words captain 
+4,0,line4 red yellow green blue orange black
+15,0,line5 dakota hey man like this is more data that came like later

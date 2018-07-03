@@ -1,10 +1,9 @@
 package com.rueggerllc.flink.tests;
 
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -15,8 +14,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.rueggerllc.flink.stream.producers.socket.ContinuousSocketProducerStrategy;
+import com.rueggerllc.flink.stream.producers.socket.DiscreteSocketProducerStrategy;
 import com.rueggerllc.flink.stream.producers.socket.SocketProducerServer;
-import com.rueggerllc.flink.stream.util.Utils;
 
 
 public class StreamTests {
@@ -49,11 +48,12 @@ public class StreamTests {
 
 	
 	@Test
-	// @Ignore
-	public void testSendContinuousMessages() {
+	@Ignore
+	public void tesSensor() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new ContinuousSocketProducerStrategy("input/raspberrypi.txt",true));
-			server.execute();
+			String fileName = "input/raspberrypi.txt";
+			boolean timestamped = false;
+			runContinuouSocketProducer(fileName, timestamped);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}		
@@ -61,34 +61,36 @@ public class StreamTests {
 	
 	
 	@Test
-	@Ignore
-	public void testReadFile() {
+	// @Ignore
+	public void testSessionWindow() {
 		try {
-			String filePath = "input/raspberrypi.txt";
-			BufferedReader reader = null;
-			InputStream is = getClass().getClassLoader().getResourceAsStream(filePath);
-			if (is == null) {
-				throw new Exception("File Not Found: " + filePath);
-			}
-			reader = new BufferedReader(new InputStreamReader(is));
-			String line = null;
-			while ((line=reader.readLine()) != null) {
-				if (line.startsWith("#") || Utils.isBlank(line)) {
-					continue;
-				}
-				logger.info(line);
-			}
-			close(reader);
+			String fileName = "input/sessionstream.txt";
+			boolean timestamped = false;
+			runDiscreteSocketProducer(fileName,timestamped);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}		
 	}
 	
-	private void close(Reader reader) {
-		try {
-			if (reader != null) {reader.close();}
-		} catch (Exception e) {
-		}
+	
+	
+	
+	private void runContinuouSocketProducer(String fileName, boolean timestamped) throws Exception {
+		String strategyClassName = ContinuousSocketProducerStrategy.class.getCanonicalName();
+		Map<String,String> parms = new HashMap<String,String>();
+		parms.put("filePath",fileName);
+		parms.put("timestamped", String.valueOf(timestamped));
+		SocketProducerServer server = new SocketProducerServer(strategyClassName, parms);
+		server.execute();		
+	}
+	
+	private void runDiscreteSocketProducer(String fileName, boolean timestamped) throws Exception {
+		String strategyClassName = DiscreteSocketProducerStrategy.class.getCanonicalName();
+		Map<String,String> parms = new HashMap<String,String>();
+		parms.put("filePath",fileName);
+		parms.put("timestamped", String.valueOf(timestamped));
+		SocketProducerServer server = new SocketProducerServer(strategyClassName, parms);
+		server.execute();		
 	}
 	
 	

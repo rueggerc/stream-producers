@@ -62,7 +62,8 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 			while ((msg = valueFactory.getNextMessage()) != null) {
 				// logger.info("MSG=" + msg);
 				System.out.println("MSG=" + msg);
-				sendMessage(msg, valueFactory.getDelayValue());
+				sleep(valueFactory.getDelayValue());
+				sendMessage(msg);
 			}
 			logger.info("====== GENERATE MESSAGES END");
 			

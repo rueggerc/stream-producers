@@ -44,61 +44,61 @@ public class SensorTests {
 		
 	
 	
-	@Test
-	@Ignore
-	public void testStream() {
-		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream1.txt",false));
-			server.execute();
-		} catch (Exception e) {
-			logger.error("ERROR", e);
-		}
-	}
-	
-	@Test
-	// @Ignore
-	public void testStream131316() {
-		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131316.txt",true));
-			server.execute();
-		} catch (Exception e) {
-			logger.error("ERROR", e);
-		}
-	}
-	
-	@Test
-	@Ignore
-	public void testStream131619() {
-		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131619.txt",true));
-			server.execute();
-		} catch (Exception e) {
-			logger.error("ERROR", e);
-		}
-	}
-	
-	@Test
-	@Ignore
-	public void testSendContinuousMessages() {
-		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131619.txt",true));
-			server.execute();
-		} catch (Exception e) {
-			logger.error("ERROR", e);
-		}		
-	}
-	
-	
-	@Test
-	@Ignore
-	public void testWordCount() {
-		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/words.txt",false));
-			server.execute();
-		} catch (Exception e) {
-			logger.error("ERROR", e);
-		}
-	}
+//	@Test
+//	@Ignore
+//	public void testStream() {
+//		try {
+//			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream1.txt",false));
+//			server.execute();
+//		} catch (Exception e) {
+//			logger.error("ERROR", e);
+//		}
+//	}
+//	
+//	@Test
+//	// @Ignore
+//	public void testStream131316() {
+//		try {
+//			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131316.txt",true));
+//			server.execute();
+//		} catch (Exception e) {
+//			logger.error("ERROR", e);
+//		}
+//	}
+//	
+//	@Test
+//	@Ignore
+//	public void testStream131619() {
+//		try {
+//			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131619.txt",true));
+//			server.execute();
+//		} catch (Exception e) {
+//			logger.error("ERROR", e);
+//		}
+//	}
+//	
+//	@Test
+//	@Ignore
+//	public void testSendContinuousMessages() {
+//		try {
+//			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/sensorstream131619.txt",true));
+//			server.execute();
+//		} catch (Exception e) {
+//			logger.error("ERROR", e);
+//		}		
+//	}
+//	
+//	
+//	@Test
+//	@Ignore
+//	public void testWordCount() {
+//		try {
+//			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/words.txt",false));
+//			server.execute();
+//		} catch (Exception e) {
+//			logger.error("ERROR", e);
+//		}
+//	}
 	
 	
 	

@@ -1,6 +1,9 @@
 package com.rueggerllc.flink.tests;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -39,19 +42,27 @@ public class BasicStreamTests {
 	public void testDummy() {
 		logger.info("Dummy Test Begin");
 	}
-		
-
+	
 	@Test
 	// @Ignore
 	public void testWordCount() {
 		try {
-			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/words.txt",false));
-			server.execute();
+			String fileName = "input/words.txt";
+			boolean timestamped = false;
+			runDiscreteSocketProducer(fileName,timestamped);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
-		}
+		}		
 	}
-	
+
+	private void runDiscreteSocketProducer(String fileName, boolean timestamped) throws Exception {
+		String strategyClassName = DiscreteSocketProducerStrategy.class.getCanonicalName();
+		Map<String,String> parms = new HashMap<String,String>();
+		parms.put("filePath",fileName);
+		parms.put("timestamped", String.valueOf(timestamped));
+		SocketProducerServer server = new SocketProducerServer(strategyClassName, parms);
+		server.execute();		
+	}
 	
 	
 

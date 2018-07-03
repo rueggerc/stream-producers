@@ -3,10 +3,10 @@ package com.rueggerllc.flink.stream.producers.socket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Scanner;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -15,52 +15,44 @@ import com.rueggerllc.flink.stream.producers.ProducerStrategy;
 public class SocketProducerServer {
 
 	private static Logger logger = Logger.getLogger(SocketProducerServer.class);
-	private SocketProducerStrategy strategy;
+	private String strategyClassName;
+	private Map<String,String> strategyParms;
 	
-	public SocketProducerServer(SocketProducerStrategy strategy) {
-		this.strategy = strategy;
+	public SocketProducerServer(String strategyClassName, Map<String,String> strategyParms) {
+		this.strategyClassName = strategyClassName;
+		this.strategyParms = strategyParms;
 	}
 	
 	
 	public void execute() {
 			
-			Scanner stdin = null;
 			try {
 				
 				logger.info("SensorSocketServer Startup...");
 				int portNumber = 9999;
 				ServerSocket serverSocket = new ServerSocket(portNumber);
-				logger.info("Waiting for Client...");
 				
-				Socket clientSocket = serverSocket.accept();
-				logger.info("Got client connection");
-				PrintWriter socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);
-				BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				strategy.setSocketWriter(socketOutput);
-				
-				// Start Data Producing Thread
-				ProducerThread producer = new ProducerThread(strategy);
-				producer.start();
-				
-				// Main Thread
-				// Wait for user to indicate "exit" to shutdown
-				logger.info("Type exit to shutdown");
-				stdin = new Scanner(System.in);
-				String line = "";
-				while (!line.equalsIgnoreCase("exit") && !line.equalsIgnoreCase("quit")) {
-					line = stdin.next();
-				}
-				
-				logger.info("Stopping Producer...");
-				producer.shutdown();
-				
-				// Exit
-				producer.join();
-				logger.info("SocketProducerServer Shutdown");
-			
+				while (true) {
+					logger.info("Waiting for Client...");
+					Socket clientSocket = serverSocket.accept();
+					logger.info("Got client connection");
+					
+					// Create Strategy
+					String filePath = strategyParms.get("filePath");
+					boolean timeStamped = Boolean.parseBoolean(strategyParms.get("timestamped"));
+					Constructor constructor = Class.forName(strategyClassName).getConstructor(java.lang.String.class, boolean.class);
+					SocketProducerStrategy strategy = (SocketProducerStrategy)constructor.newInstance(filePath,timeStamped);
+					PrintWriter socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);
+					BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+					strategy.setSocketWriter(socketOutput);
+					
+					// Start Data Producing Thread
+					ProducerThread producer = new ProducerThread(strategy);
+					producer.start();					
+			}
 			
 		} catch (Exception e) {
-			logger.error("ERROR", e);
+			logger.info("SocketProducerServer Shutdown");
 		}
 	}
 
@@ -93,7 +85,6 @@ public class SocketProducerServer {
 	
 	
 	public static void main(String[] args) {
-		Scanner stdin = null;
 		try {
 			
 		} catch (Exception e) {
