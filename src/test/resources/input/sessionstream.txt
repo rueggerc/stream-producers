@@ -1,12 +1,20 @@
 # Here is a commmented line
 # Session1
 1,0,user1,./session1pge.xhtml
+0,0,user3,./session1pge.xhtml
 1,0,user1,./orderbyPage.xhtml
+0,0,user2,./userprofile.xhtml?userid=user2
 # Session2
 12,0,user1,./session2pge.xhtml
+0,0,user2,./userprofile.xhtml?userid=user2
 2,0,user1,./catalog1234.xhtml
+0,0,user2,./userprofile.xhtml?userid=user2
 1,0,user1,./orderbyPage.xhtml
+0,0,user2,./userprofile.xhtml?userid=user2
 1,0,user1,./checkout123.xhtml
+0,0,user2,./userprofile.xhtml?userid=user2
+0,0,user3,./userprofile.xhtml?userid=user3
+0,0,user3,./userprofile.xhtml?userid=user3
 # Session 3
 13,0,user1,./session3pge.xhtml
 3,0,user1,./catalog1234.xhtml

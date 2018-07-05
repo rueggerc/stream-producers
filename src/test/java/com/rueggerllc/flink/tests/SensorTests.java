@@ -1,6 +1,9 @@
 package com.rueggerllc.flink.tests;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -41,7 +44,30 @@ public class SensorTests {
 	public void testDummy() {
 		logger.info("Dummy Test Begin");
 	}
-		
+	
+	@Test
+	@Ignore
+	public void testSensor131316() {
+		try {
+			String fileName = "input/sensorstream131316.txt";
+			boolean timestamped = true;
+			runDiscreteSocketProducer(fileName,timestamped);
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}		
+	}
+	
+	@Test
+	// @Ignore
+	public void testSensor131619() {
+		try {
+			String fileName = "input/sensorstream131619.txt";
+			boolean timestamped = true;
+			runDiscreteSocketProducer(fileName,timestamped);
+		} catch (Exception e) {
+			logger.error("ERROR", e);
+		}		
+	}
 	
 	
 //	@Test
@@ -89,16 +115,17 @@ public class SensorTests {
 //	}
 //	
 //	
-//	@Test
-//	@Ignore
-//	public void testWordCount() {
-//		try {
-//			SocketProducerServer server = new SocketProducerServer(new DiscreteSocketProducerStrategy("input/words.txt",false));
-//			server.execute();
-//		} catch (Exception e) {
-//			logger.error("ERROR", e);
-//		}
-//	}
+
+	
+	
+	private void runDiscreteSocketProducer(String fileName, boolean timestamped) throws Exception {
+		String strategyClassName = DiscreteSocketProducerStrategy.class.getCanonicalName();
+		Map<String,String> parms = new HashMap<String,String>();
+		parms.put("filePath",fileName);
+		parms.put("timestamped", String.valueOf(timestamped));
+		SocketProducerServer server = new SocketProducerServer(strategyClassName, parms);
+		server.execute();		
+	}
 	
 	
 	

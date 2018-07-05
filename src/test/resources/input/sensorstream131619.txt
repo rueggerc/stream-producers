@@ -1,3 +1,16 @@
-13,0,sensor1,message1,this is some text,28.33
-3,0,sensor1,message2,here is more text,311.42
-3,6,sensor1,message3 (late),and yet more text,12.33
+13,0,sensor1,reading1,reading1 t=13 late=0,28.33
+3,0,sensor1,reading3,reading3 t=16 late=0,311.42
+3,6,sensor1,reading2,reading2 t=13 late=6,12.76
+8,0,sensor1,reading4,reading4 t=27 late=0,88.91
+# comment goes here
+2,0,sensor1,reading5,reading5 t=27 late=0,88.91
+3,0,sensor1,reading6,reading6 t=27 late=0,89.00
+4,0,sensor1,reading7,reading7 t=27 late=0,90.00
+5,0,sensor1,reading8,reading8 t=27 late=0,91.00
+6,0,sensor1,reading9,reading9 t=27 late=0,92.00
+3,0,sensor1,reading10,reading10 t=27 late=0,93.00
+1,6,sensor1,reading11,reading11 t=27 late=6,94.00
+4,0,sensor1,reading12,reading12 t=27 late=0,95.00
+1,3,sensor1,reading13,reading13 t=27 late=3,96.00
+3,0,sensor1,reading14,reading14 t=27 late=0,97.00
+7,0,sensor1,reading15,reading15 t=27 late=0,98.00
