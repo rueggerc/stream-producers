@@ -1,0 +1,11 @@
+#key,subkey,value,order,etd,std
+team1,A,5,1,1,2
+team1,B,9,8,1,2
+team1,C,7,2,1,2
+team1,D,8,6,1,2
+team1,E,3,3,1,2
+team1,F,4,4,1,2
+team1,G,3,5,1,2
+team1,H,3,7,1,2
+team1,I,8,9,1,2
+team1,J,1,10,1,2
