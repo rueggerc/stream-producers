@@ -53,6 +53,12 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 		socketWriter.flush();
 	}
 	
+	protected void sendMessage(String msg, int delay) {
+		sleep(delay);
+		socketWriter.println(msg);
+		socketWriter.flush();
+	}
+	
 	
 	protected long getNow() {
 		return Calendar.getInstance().getTimeInMillis();

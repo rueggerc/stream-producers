@@ -19,7 +19,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.rueggerllc.flink.stream.beans.EventBean;
-import com.rueggerllc.flink.stream.producers.socket.DiscreteSocketProducerStrategy;
+import com.rueggerllc.flink.stream.producers.socket.EventProducerStrategy;
 import com.rueggerllc.flink.stream.producers.socket.SocketProducerServer;
 
 
@@ -55,15 +55,15 @@ public class WatermarkTests {
 	public void testStreaming102() {
 		try {
 			String fileName = "input/streaming102.txt";
-			// boolean timestamped = false;
-			// runDiscreteSocketProducer(fileName,timestamped);
+			boolean timestamped = true;
+			runEventSocketProducer(fileName,timestamped);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}		
 	}
 	
 	@Test
-	// @Ignore
+	@Ignore
 	public void testReadFile() {
 		try {
 			String filePath = "input/streaming102.txt";
@@ -119,8 +119,8 @@ public class WatermarkTests {
 		}
 	}
 
-	private void runDiscreteSocketProducer(String fileName, boolean timestamped) throws Exception {
-		String strategyClassName = DiscreteSocketProducerStrategy.class.getCanonicalName();
+	private void runEventSocketProducer(String fileName, boolean timestamped) throws Exception {
+		String strategyClassName = EventProducerStrategy.class.getCanonicalName();
 		Map<String,String> parms = new HashMap<String,String>();
 		parms.put("filePath",fileName);
 		parms.put("timestamped", String.valueOf(timestamped));
