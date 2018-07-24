@@ -16,11 +16,11 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 	private static Logger logger = Logger.getLogger(ContinuousSocketProducerStrategy.class);
 
 	
-	public ContinuousSocketProducerStrategy(String filePath, boolean timestamped) {
+	public ContinuousSocketProducerStrategy(String filePath, boolean timestamped) throws Exception {
 		super(filePath,timestamped);
 	}
 	
-	public  void createMessages(long startTime) throws Exception {
+	public  void createMessages() throws Exception {
 		try {
 			
 			ValueFactory valueFactory = new ValueFactory();
@@ -76,6 +76,9 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 	private long getValue(String[] tokens) {
 		long value = Long.valueOf(tokens[1]);
 		return value;
+	}
+	
+	protected  void sendMessages() throws Exception {
 	}
 	
 	

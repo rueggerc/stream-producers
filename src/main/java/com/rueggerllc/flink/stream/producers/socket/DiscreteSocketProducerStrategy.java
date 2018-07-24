@@ -12,11 +12,11 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 	private static Logger logger = Logger.getLogger(DiscreteSocketProducerStrategy.class);
 	
 	
-	public DiscreteSocketProducerStrategy(String filePath, boolean timestamped) {
+	public DiscreteSocketProducerStrategy(String filePath, boolean timestamped) throws Exception {
 		super(filePath, timestamped);
 	}
 	
-	protected  void createMessages(long startTime) throws Exception {
+	protected  void createMessages() throws Exception {
 		BufferedReader reader = null;
 		logger.info("createMessages BEGIN");
 		InputStream is = getClass().getClassLoader().getResourceAsStream(getFilePath());
@@ -36,6 +36,9 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 			}
 		}
 		logger.info("createMessages END");
+	}
+	
+	protected  void sendMessages() throws Exception {
 	}
 	
 	protected String getMessage(String[] tokens) {

@@ -51,7 +51,7 @@ public class WatermarkTests {
 	}
 	
 	@Test
-	// @Ignore
+	@Ignore
 	public void testStreaming102() {
 		try {
 			String fileName = "input/streaming102.txt";
@@ -64,60 +64,30 @@ public class WatermarkTests {
 	
 	@Test
 	@Ignore
-	public void testReadFile() {
+	public void testStreaming131316() {
 		try {
-			String filePath = "input/streaming102.txt";
-			BufferedReader reader = null;
-			InputStream is = getClass().getClassLoader().getResourceAsStream(filePath);
-			if (is == null) {
-				throw new Exception("File Not Found: " + filePath);
-			}
-			reader = new BufferedReader(new InputStreamReader(is));
-			String line = null;
-			List<EventBean> eventBeans = new ArrayList<>();
-			while ((line=reader.readLine()) != null) {
-				if (line.startsWith("#")) {
-					continue;
-				}
-				// System.out.println(line);
-				
-				String[] tokens = line.split(",");
-				String key = tokens[0];
-				String label = tokens[1];
-				String value = tokens[2];
-				int processTimeOrder = Integer.parseInt(tokens[3]);
-				int eventTimeDelay = Integer.parseInt(tokens[4]);
-				int processTimeDelay = Integer.parseInt(tokens[5]);
-				
-				EventBean event = new EventBean();
-				event.setKey(key);
-				event.setLabel(label);
-				event.setValue(value);
-				event.setProcessTimeOrder(processTimeOrder);
-				event.setEventTimeDelay(eventTimeDelay);
-				event.setProcessTimeDelay(processTimeDelay);
-				
-				System.out.println(event + "\n");
-				eventBeans.add(event);
-				
-						
-				
-			}
-			close(reader);
-			
-			
+			System.out.println("tstStreaming131316 BEGIN");
+			String fileName = "input/streaming131316.txt";
+			boolean timestamped = true;
+			runEventSocketProducer(fileName,timestamped);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
 		}		
 	}
 	
-	
-	private void close(Reader reader) {
+	@Test
+	// @Ignore
+	public void testStreaming131916() {
 		try {
-			if (reader != null) {reader.close();}
+			System.out.println("testStreaming131916 BEGIN");
+			String fileName = "input/streaming131916.txt";
+			boolean timestamped = true;
+			runEventSocketProducer(fileName,timestamped);
 		} catch (Exception e) {
-		}
+			logger.error("ERROR", e);
+		}		
 	}
+	
 
 	private void runEventSocketProducer(String fileName, boolean timestamped) throws Exception {
 		String strategyClassName = EventProducerStrategy.class.getCanonicalName();

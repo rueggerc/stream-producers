@@ -20,21 +20,24 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 	private long startTime;
 
 	
-	public SocketProducerStrategy(String filePath, boolean timestamped) {
+	public SocketProducerStrategy(String filePath, boolean timestamped) throws Exception {
 		this.filePath = filePath;
 		this.timestamped = timestamped;
+		// startTime = getNow();
 	}
 	
 	public void execute() throws Exception {
 		startTime = getNow();
-		createMessages(startTime);
+		createMessages();
+		sendMessages();
 	}
 	public void shutdown() {
 		socketWriter.close();
 	}
 	
 	
-	protected abstract void createMessages(long startTime) throws Exception;
+	protected abstract void createMessages() throws Exception;
+	protected abstract void sendMessages() throws Exception;
 	
 	
 	protected void sleep(int sleepValue) {

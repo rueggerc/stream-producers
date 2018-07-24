@@ -17,13 +17,13 @@ import com.rueggerllc.flink.stream.util.Utils;
 public class EventProducerStrategy extends SocketProducerStrategy {
 
 	private static Logger logger = Logger.getLogger(EventProducerStrategy.class);
+	private List<EventBean> eventBeans;
 	
-	
-	public EventProducerStrategy(String filePath, boolean timestamped) {
+	public EventProducerStrategy(String filePath, boolean timestamped) throws Exception {
 		super(filePath, timestamped);
 	}
 	
-	protected  void createMessages(long startTime) throws Exception {
+	protected  void createMessages() throws Exception {
 		BufferedReader reader = null;
 		logger.info("createMessages BEGIN");
 		InputStream is = getClass().getClassLoader().getResourceAsStream(getFilePath());
@@ -33,13 +33,13 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 		
 		reader = new BufferedReader(new InputStreamReader(is));
 		String line = null;
-		List<EventBean> eventBeans = new ArrayList<>();
+		eventBeans = new ArrayList<>();
 		while ((line=reader.readLine()) != null) {
 			if (line.startsWith("#")) {
 				continue;
 			}
-			// System.out.println(line);
-			
+
+			System.out.println(line);
 			String[] tokens = line.split(",");
 			String key = tokens[0];
 			String label = tokens[1];
@@ -55,20 +55,25 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 			event.setProcessTimeOrder(processTimeOrder);
 			event.setEventTimeDelay(eventTimeDelay);
 			event.setProcessTimeDelay(processTimeDelay);
-			
-			Thread.currentThread().sleep(eventTimeDelay*1000);
-			long timestamp = System.currentTimeMillis();
-			event.setTimestamp(timestamp);
-					
-			System.out.println("Adding " + event.getLabel());
 			eventBeans.add(event);
 		}
 		close(reader);
+		logger.info("createMessages END");
+	}
+	
+	protected  void sendMessages() throws Exception {
+		logger.info("sendMessages BEGIN");
 		
-		// Sort by Processing Time
+		// Set Event Times
+		long eventTime = System.currentTimeMillis();
+		for (EventBean eventBean : eventBeans) {
+			eventTime += eventBean.getEventTimeDelay()*1000;
+			eventBean.setTimestamp(eventTime);
+		}
+
+		// Send messages in Process Time Order
 		Collections.sort(eventBeans, new EventComparator());
-		
-		// Send messages
+		long startTime = System.currentTimeMillis();
 		for (EventBean eventBean : eventBeans) {
 			StringBuilder buffer = new StringBuilder();
 			buffer.append(eventBean.getKey()+",");
@@ -78,10 +83,10 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 			buffer.append(Utils.getFormattedTimestamp(eventBean.getTimestamp()));
 			String message = buffer.toString();
 			System.out.println(message);
-			int processTimeDelay = eventBean.getProcessTimeDelay();
-			sendMessage(message, processTimeDelay);
+			int delay = eventBean.getEventTimeDelay() + eventBean.getProcessTimeDelay();
+			sendMessage(message, delay);
 		}
-		logger.info("createMessages END");
+		logger.info("sendMessages END");
 	}
 	
 
