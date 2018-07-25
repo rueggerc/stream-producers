@@ -8,17 +8,23 @@ public class EventBean {
 	private String value;
 	private int processTimeOrder;
 	private int eventTimeDelay;
-	private int processTimeDelay;
+	// private int processTimeDelay;
+	private double processTimeDelay;
+	
+//	public String toString() {
+//		StringBuilder buffer = new StringBuilder();
+//		buffer.append("EventBean.key:" + key);
+//		buffer.append("\nEventBean.label:" + label);
+//		buffer.append("\nEventBean.value:" + value);
+//		buffer.append("\nEventBean.processTimeOrder:" + processTimeOrder);
+//		buffer.append("\nEventBean.eventTimeDelay:" + eventTimeDelay);
+//		buffer.append("\nEventBean.processTimeDelay:" + processTimeDelay);
+//		return buffer.toString();
+//	}
 	
 	public String toString() {
-		StringBuilder buffer = new StringBuilder();
-		buffer.append("EventBean.key:" + key);
-		buffer.append("\nEventBean.label:" + label);
-		buffer.append("\nEventBean.value:" + value);
-		buffer.append("\nEventBean.processTimeOrder:" + processTimeOrder);
-		buffer.append("\nEventBean.eventTimeDelay:" + eventTimeDelay);
-		buffer.append("\nEventBean.processTimeDelay:" + processTimeDelay);
-		return buffer.toString();
+		String line = String.format("%s %s %s %d %d %.2f",key,label,value,processTimeOrder,eventTimeDelay,processTimeDelay);
+		return line;
 	}
 	
 	public String getKey() {
@@ -51,10 +57,12 @@ public class EventBean {
 	public void setEventTimeDelay(int eventTimeDelay) {
 		this.eventTimeDelay = eventTimeDelay;
 	}
-	public int getProcessTimeDelay() {
+
+	public double getProcessTimeDelay() {
 		return processTimeDelay;
 	}
-	public void setProcessTimeDelay(int processTimeDelay) {
+
+	public void setProcessTimeDelay(double processTimeDelay) {
 		this.processTimeDelay = processTimeDelay;
 	}
 

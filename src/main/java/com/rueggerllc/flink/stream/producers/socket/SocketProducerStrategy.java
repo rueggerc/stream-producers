@@ -40,12 +40,13 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 	protected abstract void sendMessages() throws Exception;
 	
 	
-	protected void sleep(int sleepValue) {
+	protected void sleep(double sleepValue) {
 		try {
 			if (sleepValue == 0) {
 				return;
 			}
-			Thread.sleep(sleepValue*1000);
+			int sleepDuration = (int)sleepValue*1000;
+			Thread.sleep(sleepDuration);
 		} catch (Exception e) {
 			logger.error("ERROR",e);
 		}
@@ -56,7 +57,7 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 		socketWriter.flush();
 	}
 	
-	protected void sendMessage(String msg, int delay) {
+	protected void sendMessage(String msg, double delay) {
 		sleep(delay);
 		socketWriter.println(msg);
 		socketWriter.flush();

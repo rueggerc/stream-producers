@@ -39,23 +39,28 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 				continue;
 			}
 
-			System.out.println(line);
+			
 			String[] tokens = line.split(",");
 			String key = tokens[0];
 			String label = tokens[1];
 			String value = tokens[2];
 			int processTimeOrder = Integer.parseInt(tokens[3]);
 			int eventTimeDelay = Integer.parseInt(tokens[4]);
-			int processTimeDelay = Integer.parseInt(tokens[5]);
+			// int processTimeDelay = Integer.parseInt(tokens[5]);
+			double processTimeDelay = Double.parseDouble(tokens[5]);
 			
-			EventBean event = new EventBean();
-			event.setKey(key);
-			event.setLabel(label);
-			event.setValue(value);
-			event.setProcessTimeOrder(processTimeOrder);
-			event.setEventTimeDelay(eventTimeDelay);
-			event.setProcessTimeDelay(processTimeDelay);
-			eventBeans.add(event);
+			EventBean eventBean = new EventBean();
+			eventBean.setKey(key);
+			eventBean.setLabel(label);
+			eventBean.setValue(value);
+			eventBean.setProcessTimeOrder(processTimeOrder);
+			eventBean.setEventTimeDelay(eventTimeDelay);
+			eventBean.setProcessTimeDelay(processTimeDelay);
+			int delay = eventBean.getEventTimeDelay();
+			sleep(delay);
+			eventBean.setTimestamp(getNow());
+			System.out.println(eventBean);
+			eventBeans.add(eventBean);
 		}
 		close(reader);
 		logger.info("createMessages END");
@@ -65,11 +70,11 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 		logger.info("sendMessages BEGIN");
 		
 		// Set Event Times
-		long eventTime = System.currentTimeMillis();
-		for (EventBean eventBean : eventBeans) {
-			eventTime += eventBean.getEventTimeDelay()*1000;
-			eventBean.setTimestamp(eventTime);
-		}
+//		long eventTime = System.currentTimeMillis();
+//		for (EventBean eventBean : eventBeans) {
+//			eventTime += eventBean.getEventTimeDelay()*1000;
+//			eventBean.setTimestamp(eventTime);
+//		}
 
 		// Send messages in Process Time Order
 		Collections.sort(eventBeans, new EventComparator());
@@ -83,7 +88,8 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 			buffer.append(Utils.getFormattedTimestamp(eventBean.getTimestamp()));
 			String message = buffer.toString();
 			System.out.println(message);
-			int delay = eventBean.getEventTimeDelay() + eventBean.getProcessTimeDelay();
+			// int delay = eventBean.getEventTimeDelay() + eventBean.getProcessTimeDelay();
+			double delay = eventBean.getProcessTimeDelay();
 			sendMessage(message, delay);
 		}
 		logger.info("sendMessages END");
