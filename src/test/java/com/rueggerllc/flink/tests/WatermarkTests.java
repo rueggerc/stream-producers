@@ -65,9 +65,8 @@ public class WatermarkTests {
 	@Ignore
 	public void testStreaming131316() {
 		try {
-			System.out.println("tstStreaming131316 BEGIN");
+			System.out.println("testStreaming131316");
 			String fileName = "input/streaming131316.txt";
-			boolean timestamped = true;
 			runEventSocketProducer(fileName);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -78,9 +77,8 @@ public class WatermarkTests {
 	@Ignore
 	public void testStreaming131916() {
 		try {
-			System.out.println("testStreaming131916 BEGIN");
+			System.out.println("testStreaming131916");
 			String fileName = "input/streaming131916.txt";
-			boolean timestamped = true;
 			runEventSocketProducer(fileName);
 		} catch (Exception e) {
 			logger.error("ERROR", e);
@@ -92,7 +90,6 @@ public class WatermarkTests {
 		String strategyClassName = EventProducerStrategy.class.getCanonicalName();
 		Map<String,String> parms = new HashMap<String,String>();
 		parms.put("filePath",fileName);
-		parms.put("timestamped", String.valueOf("true"));
 		SocketProducerServer server = new SocketProducerServer(strategyClassName, parms);
 		server.execute();		
 	}

@@ -16,8 +16,8 @@ public class ContinuousSocketProducerStrategy extends SocketProducerStrategy {
 	private static Logger logger = Logger.getLogger(ContinuousSocketProducerStrategy.class);
 
 	
-	public ContinuousSocketProducerStrategy(String filePath, boolean timestamped) throws Exception {
-		super(filePath,timestamped);
+	public ContinuousSocketProducerStrategy(String filePath) throws Exception {
+		super(filePath);
 	}
 	
 	public  void createMessages() throws Exception {

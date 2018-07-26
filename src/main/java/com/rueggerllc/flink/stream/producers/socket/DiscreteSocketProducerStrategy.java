@@ -12,8 +12,8 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 	private static Logger logger = Logger.getLogger(DiscreteSocketProducerStrategy.class);
 	
 	
-	public DiscreteSocketProducerStrategy(String filePath, boolean timestamped) throws Exception {
-		super(filePath, timestamped);
+	public DiscreteSocketProducerStrategy(String filePath) throws Exception {
+		super(filePath);
 	}
 	
 	protected  void createMessages() throws Exception {
@@ -29,11 +29,7 @@ public class DiscreteSocketProducerStrategy extends SocketProducerStrategy {
 			if (Utils.isBlank(line) || line.trim().startsWith("#")) {
 				continue;
 			}
-			if (getTimestamped()) {
-				sendTimestampedMessage(line);
-			} else {
-				sendNoTimestampMessage(line);
-			}
+			sendTimestampedMessage(line);
 		}
 		logger.info("createMessages END");
 	}

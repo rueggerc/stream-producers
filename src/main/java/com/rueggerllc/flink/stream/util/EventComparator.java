@@ -8,9 +8,10 @@ public class EventComparator implements Comparator<EventBean> {
 
 	@Override
 	public int compare(EventBean event1, EventBean event2) {
-		Integer processTime1 = event1.getProcessTimeOrder();
-		Integer processTime2 = event2.getProcessTimeOrder();
-		return processTime1.compareTo(processTime2);
+//		Integer processTime1 = event1.getProcessTimeOrder();
+//		Integer processTime2 = event2.getProcessTimeOrder();
+//		return processTime1.compareTo(processTime2);
+		return 0;
 	}
 
 }

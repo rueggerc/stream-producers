@@ -23,34 +23,29 @@ public class SocketProducerServer {
 		this.strategyParms = strategyParms;
 	}
 	
-	
 	public void execute() {
+		try {
+			logger.info("SensorSocketServer Startup...");
+			int portNumber = 9999;
+			ServerSocket serverSocket = new ServerSocket(portNumber);
 			
-			try {
+			while (true) {
+				logger.info("Waiting for Client...");
+				Socket clientSocket = serverSocket.accept();
+				logger.info("Got client connection");
 				
-				logger.info("SensorSocketServer Startup...");
-				int portNumber = 9999;
-				ServerSocket serverSocket = new ServerSocket(portNumber);
+				// Create Strategy
+				String filePath = strategyParms.get("filePath");
+				Constructor constructor = Class.forName(strategyClassName).getConstructor(java.lang.String.class);
+				SocketProducerStrategy strategy = (SocketProducerStrategy)constructor.newInstance(filePath);
+				PrintWriter socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);
+				BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				strategy.setSocketWriter(socketOutput);
 				
-				while (true) {
-					logger.info("Waiting for Client...");
-					Socket clientSocket = serverSocket.accept();
-					logger.info("Got client connection");
-					
-					// Create Strategy
-					String filePath = strategyParms.get("filePath");
-					boolean timeStamped = Boolean.parseBoolean(strategyParms.get("timestamped"));
-					Constructor constructor = Class.forName(strategyClassName).getConstructor(java.lang.String.class, boolean.class);
-					SocketProducerStrategy strategy = (SocketProducerStrategy)constructor.newInstance(filePath,timeStamped);
-					PrintWriter socketOutput = new PrintWriter(clientSocket.getOutputStream(), true);
-					BufferedReader socketInput = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-					strategy.setSocketWriter(socketOutput);
-					
-					// Start Data Producing Thread
-					ProducerThread producer = new ProducerThread(strategy);
-					producer.start();					
-			}
-			
+				// Start Data Producing Thread
+				ProducerThread producer = new ProducerThread(strategy);
+				producer.start();					
+			}	
 		} catch (Exception e) {
 			logger.info("SocketProducerServer Shutdown");
 		}

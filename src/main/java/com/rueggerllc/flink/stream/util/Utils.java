@@ -18,8 +18,17 @@ public class Utils {
 		return dateFormatter.format(getDate(timestamp));
 	}
 	
+	public static String getFormattedNow() {
+		return dateFormatter.format(getNow());
+	}
+	
 	public static boolean isBlank(String value) {
 		return value == null || value.trim().equals("");
+	}
+	
+	private static Date getNow() {
+		Calendar calendar = Calendar.getInstance();
+		return calendar.getTime();
 	}
 
 }

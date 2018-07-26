@@ -1,29 +1,23 @@
 package com.rueggerllc.flink.stream.beans;
 
+import com.rueggerllc.flink.stream.util.Utils;
+
 public class EventBean {
 
 	private long timestamp;
 	private String key;
 	private String label;
 	private String value;
-	private int processTimeOrder;
-	private int eventTimeDelay;
-	// private int processTimeDelay;
+	private double eventTimeDelay;
 	private double processTimeDelay;
 	
-//	public String toString() {
-//		StringBuilder buffer = new StringBuilder();
-//		buffer.append("EventBean.key:" + key);
-//		buffer.append("\nEventBean.label:" + label);
-//		buffer.append("\nEventBean.value:" + value);
-//		buffer.append("\nEventBean.processTimeOrder:" + processTimeOrder);
-//		buffer.append("\nEventBean.eventTimeDelay:" + eventTimeDelay);
-//		buffer.append("\nEventBean.processTimeDelay:" + processTimeDelay);
-//		return buffer.toString();
-//	}
 	
 	public String toString() {
-		String line = String.format("%s %s %s %d %d %.2f",key,label,value,processTimeOrder,eventTimeDelay,processTimeDelay);
+		String line = String.format("%s %s %s %.2f %.2f",key,label,value,eventTimeDelay,processTimeDelay);
+		return line;
+	}
+	public String toMessage() {
+		String line = String.format("%s,%s,%s,%d,%s,%s",key,label,value,timestamp,Utils.getFormattedTimestamp(timestamp),Utils.getFormattedNow());
 		return line;
 	}
 	
@@ -45,19 +39,13 @@ public class EventBean {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	public int getProcessTimeOrder() {
-		return processTimeOrder;
-	}
-	public void setProcessTimeOrder(int processTimeOrder) {
-		this.processTimeOrder = processTimeOrder;
-	}
-	public int getEventTimeDelay() {
+
+	public double getEventTimeDelay() {
 		return eventTimeDelay;
 	}
-	public void setEventTimeDelay(int eventTimeDelay) {
+	public void setEventTimeDelay(double eventTimeDelay) {
 		this.eventTimeDelay = eventTimeDelay;
 	}
-
 	public double getProcessTimeDelay() {
 		return processTimeDelay;
 	}

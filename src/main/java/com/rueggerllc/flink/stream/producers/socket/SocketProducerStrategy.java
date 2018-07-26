@@ -14,16 +14,13 @@ import com.rueggerllc.flink.stream.producers.ProducerStrategy;
 public abstract class SocketProducerStrategy implements ProducerStrategy {
 	
 	private static Logger logger = Logger.getLogger(SocketProducerStrategy.class);
-	private boolean timestamped = false;
 	private PrintWriter socketWriter;
 	private String filePath;
 	private long startTime;
 
 	
-	public SocketProducerStrategy(String filePath, boolean timestamped) throws Exception {
+	public SocketProducerStrategy(String filePath) throws Exception {
 		this.filePath = filePath;
-		this.timestamped = timestamped;
-		// startTime = getNow();
 	}
 	
 	public void execute() throws Exception {
@@ -45,7 +42,7 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 			if (sleepValue == 0) {
 				return;
 			}
-			int sleepDuration = (int)sleepValue*1000;
+			int sleepDuration = (int)(sleepValue*1000);
 			Thread.sleep(sleepDuration);
 		} catch (Exception e) {
 			logger.error("ERROR",e);
@@ -53,6 +50,7 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 	}
 	
 	protected void sendMessage(String msg) {
+		System.out.println(msg);
 		socketWriter.println(msg);
 		socketWriter.flush();
 	}
@@ -83,9 +81,6 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 	
 	protected String getFilePath() {
 		return filePath;
-	}
-	protected boolean getTimestamped() {
-		return timestamped;
 	}
 	
 	protected void close(Reader reader) {
