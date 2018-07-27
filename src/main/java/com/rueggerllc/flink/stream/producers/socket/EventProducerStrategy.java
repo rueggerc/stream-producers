@@ -4,9 +4,14 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -17,13 +22,15 @@ import com.rueggerllc.flink.stream.util.Utils;
 public class EventProducerStrategy extends SocketProducerStrategy {
 
 	private static Logger logger = Logger.getLogger(EventProducerStrategy.class);
-	private List<EventBean> eventBeans;
+	private ExecutorService executor;
 	
 	public EventProducerStrategy(String filePath) throws Exception {
 		super(filePath);
+		executor = Executors.newFixedThreadPool(5);
 	}
 	
 	protected  void createMessages() throws Exception {
+		Map<String,List<EventBean>> eventBeanMap = new HashMap<>();
 		BufferedReader reader = null;
 		logger.info("createMessages BEGIN");
 		InputStream is = getClass().getClassLoader().getResourceAsStream(getFilePath());
@@ -33,7 +40,6 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 		
 		reader = new BufferedReader(new InputStreamReader(is));
 		String line = null;
-		eventBeans = new ArrayList<>();
 		while ((line=reader.readLine()) != null) {
 			if (line.startsWith("#") || Utils.isBlank(line.trim())) {
 				continue;
@@ -52,29 +58,68 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 			eventBean.setValue(value);
 			eventBean.setEventTimeDelay(eventTimeDelay);
 			eventBean.setProcessTimeDelay(processTimeDelay);
+			
+			List<EventBean> eventBeans = eventBeanMap.get(key);
+			if (eventBeans == null) {
+				eventBeans = new ArrayList<EventBean>();
+				eventBeanMap.put(key, eventBeans);
+			}
 			eventBeans.add(eventBean);
 		}
 		close(reader);
+		
+		// Send Messages
+		for (Map.Entry<String, List<EventBean>> entry : eventBeanMap.entrySet()) {
+			executor.submit(new SendMessageTask(this,entry.getKey(),entry.getValue()));
+		}
+		
+		// Wait for Executor to Finish
+		executor.awaitTermination(5, TimeUnit.MINUTES);
 		logger.info("createMessages END");
 	}
 	
-	protected  void sendMessages() throws Exception {
-		logger.info("sendMessages BEGIN");
-		// Send messages
-		for (EventBean eventBean : eventBeans) {
-			double eventTimeDelay = eventBean.getEventTimeDelay();
-			sleep(eventTimeDelay);
-			eventBean.setTimestamp(getNow());
-			long processTimeDelay = (long)(eventBean.getProcessTimeDelay()*1000);
-			if (processTimeDelay == 0) {
-				sendMessage(eventBean.toMessage());
-			} else {
-				EventTimerTask timerTask = new EventTimerTask(this, eventBean);
-				Timer timer = new Timer("EventTimer");
-				timer.schedule(timerTask, processTimeDelay);
+	public void sendEvent(EventBean eventBean) {
+		double eventTimeDelay = eventBean.getEventTimeDelay();
+		sleep(eventTimeDelay);
+		eventBean.setTimestamp(getNow());
+		long processTimeDelay = (long)(eventBean.getProcessTimeDelay()*1000);
+		if (processTimeDelay == 0) {
+			sendMessage(eventBean.toMessage());
+		} else {
+			EventTimerTask timerTask = new EventTimerTask(this, eventBean);
+			Timer timer = new Timer("EventTimer");
+			timer.schedule(timerTask, processTimeDelay);
+		}
+	}
+	
+	
+	private static class SendMessageTask implements Runnable {
+		private EventProducerStrategy strategy;
+		private String key;
+		private List<EventBean> eventBeans;
+		
+		public SendMessageTask(EventProducerStrategy strategy, String key, List<EventBean> eventBeans) {
+			this.strategy = strategy;
+			this.key = key;
+			this.eventBeans = eventBeans;
+		}
+		
+		@Override
+		public void run() {
+			System.out.println("Task Begin: " + key);
+			for (EventBean eventBean : eventBeans) {
+				strategy.sendEvent(eventBean);
 			}
 		}
-		logger.info("sendMessages END");
+		
+		private void sleep(long milliseconds) {
+			try {
+				TimeUnit.MILLISECONDS.sleep(milliseconds);
+			} catch (Exception e) {
+				System.err.println("Task Interrupted");
+			}
+		}
+		
 	}
 	
 	private static class EventTimerTask extends TimerTask {
@@ -89,10 +134,30 @@ public class EventProducerStrategy extends SocketProducerStrategy {
 		@Override
 		public void run() {
 			strategy.sendMessage(eventBean.toMessage());
-		}
-		
-		
+		}	
 	}
+	
+//	protected  void sendMessages() throws Exception {
+//		logger.info("sendMessages BEGIN");
+//		// Send messages
+//		for (EventBean eventBean : eventBeans) {
+//			double eventTimeDelay = eventBean.getEventTimeDelay();
+//			sleep(eventTimeDelay);
+//			eventBean.setTimestamp(getNow());
+//			long processTimeDelay = (long)(eventBean.getProcessTimeDelay()*1000);
+//			if (processTimeDelay == 0) {
+//				sendMessage(eventBean.toMessage());
+//			} else {
+//				EventTimerTask timerTask = new EventTimerTask(this, eventBean);
+//				Timer timer = new Timer("EventTimer");
+//				timer.schedule(timerTask, processTimeDelay);
+//			}
+//		}
+//		logger.info("sendMessages END");
+//	}
+	
+	
+
 	
 
 	

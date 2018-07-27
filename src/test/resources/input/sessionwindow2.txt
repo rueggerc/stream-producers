@@ -1,0 +1,27 @@
+#key,subkey,value,eventTimeDelay,processTimeDelay
+user1,user1,/page1.xhtml,1.0,0.1
+user1,user1,/page2.xhtml,1.0,0.1
+user1,user1,/page3.xhtml,1.0,0.1
+
+user1,user1,/products.xhtml,10.0,0.1
+user1,user1,/cart.xhtml,1.0,0.1
+user1,user1,/order.xhtml,1.0,0.1
+
+user1,user1,/contacts.xhtml,12.0,0.1
+user1,user1,/info.xhtml,1.0,0.1
+user1,user1,/error.xhtml,1.0,0.1
+
+# User2 Sessions
+user2,user2,/page4.xhtml,1.0,0.1
+user2,user2,/page5.xhtml,1.0,0.1
+user2,user2,/page6.xhtml,1.0,0.1
+
+user2,user2,/page10.xhtml,7.0,0.1
+user2,user2,/page11.xhtml,1.0,0.1
+user2,user2,/page12.xhtml,1.0,0.1
+
+
+# User3 Sessions
+user3,user3,/page7.xhtml,1.0,0.1
+user3,user3,/page8.xhtml,1.0,0.1
+user3,user3,/page9.xhtml,1.0,0.1

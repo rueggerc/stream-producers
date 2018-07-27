@@ -16,26 +16,15 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 	private static Logger logger = Logger.getLogger(SocketProducerStrategy.class);
 	private PrintWriter socketWriter;
 	private String filePath;
-	private long startTime;
-
 	
 	public SocketProducerStrategy(String filePath) throws Exception {
 		this.filePath = filePath;
 	}
 	
 	public void execute() throws Exception {
-		startTime = getNow();
 		createMessages();
-		sendMessages();
 	}
-	public void shutdown() {
-		socketWriter.close();
-	}
-	
-	
 	protected abstract void createMessages() throws Exception;
-	protected abstract void sendMessages() throws Exception;
-	
 	
 	protected void sleep(double sleepValue) {
 		try {
@@ -61,6 +50,9 @@ public abstract class SocketProducerStrategy implements ProducerStrategy {
 		socketWriter.flush();
 	}
 	
+	public void shutdown() {
+		socketWriter.close();
+	}
 	
 	protected long getNow() {
 		return Calendar.getInstance().getTimeInMillis();
